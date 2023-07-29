@@ -1,9 +1,8 @@
 <script lang="ts">
-import { Plan } from "../store/plansModule";
+import { Plan, colors } from "../store/plansModule";
 import { PropType, defineComponent } from "vue";
-
 import Checkbox from "./Checkbox.vue";
-import PrimaryButton from "./PrimaryButton.vue";
+import PrimaryBtn from "./PrimaryBtn.vue";
 import VFocus from "../directives/VFocus";
 
 export default defineComponent({
@@ -31,6 +30,7 @@ export default defineComponent({
                 completed: this.completed,
                 startAt: this.startAt,
                 duration: this.duration,
+                color: this.color,
             });
             this.$store.commit("closeModal");
         },
@@ -56,6 +56,10 @@ export default defineComponent({
                 this.duration = +date - this.startAt;
             }
         },
+        chengeColor(event: Event) {
+            const target = event.target as HTMLInputElement;
+            this.color = target.dataset.color as (typeof colors)[number];
+        },
     },
     data() {
         return {
@@ -64,16 +68,18 @@ export default defineComponent({
             completed: this.$props.plan.completed,
             startAt: this.$props.plan.startAt,
             duration: this.$props.plan.duration,
+            color: this.$props.plan.color,
+            colors,
         };
     },
-    components: { Checkbox, PrimaryButton },
+    components: { Checkbox, PrimaryBtn },
     directives: { focus: VFocus },
 });
 </script>
 
 <template>
     <div class="modal_container" @click="$store.commit('closeModal')" @keydown="(e) => e.key === 'Escape' && $store.commit('closeModal')">
-        <div class="modal" @click.stop>
+        <div class="modal" @click.stop :style="`border: 1px solid ${color};`">
             <div class="heading">
                 <Checkbox :active="completed" @click="$data.completed = !$data.completed" />
                 <input type="text" v-model="title" placeholder="План..." />
@@ -84,7 +90,14 @@ export default defineComponent({
                 <label>Длительность <input type="number" min="0" @change="changeDuration" :value="formatDuration(duration)" step="0.5" /></label>
                 <label>Окончание <input type="time" @focusout="changeEnd" :value="formatDate(startAt + duration)" /></label>
             </div>
-            <PrimaryButton @click="saveChanges">Сохранить</PrimaryButton>
+            <footer>
+                <div class="colors">
+                    <div class="color_container" v-for="c in colors" :class="c === color && 'active'">
+                        <div class="color" :style="`background-color: ${c};`" :data-color="c" @click="chengeColor"></div>
+                    </div>
+                </div>
+                <PrimaryBtn @click="saveChanges"><icon name="floppy-disk" />Сохранить</PrimaryBtn>
+            </footer>
         </div>
     </div>
 </template>
@@ -104,7 +117,7 @@ export default defineComponent({
 }
 .modal {
     width: 400px;
-    background: #fff;
+    background: var(--background-color);
     padding: 16px;
     border-radius: 16px;
 
@@ -144,7 +157,7 @@ export default defineComponent({
                 padding: 2px;
                 font-family: inherit;
                 font-size: 16px;
-                border: 1px solid #999;
+                border: 1px solid var(--border-color);
                 margin-top: 2px;
                 border-radius: 4px;
                 width: 100%;
@@ -153,9 +166,43 @@ export default defineComponent({
         }
     }
 
-    button {
-        float: right;
-        margin-top: 2px;
+    footer {
+        display: flex;
+        justify-content: space-between;
+        button {
+            float: right;
+            margin-top: 2px;
+            display: flex;
+            svg {
+                width: 18px;
+                height: 18px;
+                margin-right: 4px;
+            }
+        }
+        .colors {
+            display: flex;
+            height: 20px;
+            align-items: center;
+            .color {
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                border: 1px solid var(--border-color);
+                background-color: #fff;
+                cursor: pointer;
+                box-sizing: border-box;
+            }
+            .color_container {
+                margin-right: 4px;
+                &.active {
+                    border: 1px solid var(--border-color);
+                    border-radius: 50%;
+                    padding: 1px;
+                    height: 20px;
+                    box-sizing: border-box;
+                }
+            }
+        }
     }
 }
 </style>

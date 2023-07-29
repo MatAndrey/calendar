@@ -1,18 +1,25 @@
 <script lang="ts">
-import Week from "./Week.vue";
-import PlanDialog from "./PlanDialog.vue";
+import Week from "../components/Week.vue";
+import PlanDialog from "../components/PlanDialog.vue";
+import PrimaryBtn from "../components/PrimaryBtn.vue";
 import { defineComponent } from "vue";
+import { uid } from "uid";
 
 const months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+
+const weekStart = new Date();
+weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1);
+weekStart.setHours(0, 0, 0, 0);
 
 export default defineComponent({
     components: {
         Week,
         PlanDialog,
+        PrimaryBtn,
     },
     data() {
         return {
-            periodStart: 1689552000000 + 1000 * 60 * 60 * 24 * 7,
+            periodStart: +weekStart,
             periodDuration: 1000 * 60 * 60 * 24 * 7,
         };
     },
@@ -22,6 +29,20 @@ export default defineComponent({
         },
         previous() {
             this.periodStart -= this.periodDuration;
+        },
+        createPlan() {
+            const date = new Date();
+            date.setDate(date.getDate() + 1);
+            date.setHours(0, 0, 0, 0);
+            this.$store.commit("openModal", {
+                title: "",
+                description: "",
+                startAt: +date,
+                duration: 0,
+                completed: false,
+                color: "orange",
+                id: uid(),
+            });
         },
     },
     computed: {
@@ -36,30 +57,28 @@ export default defineComponent({
 <template>
     <PlanDialog :plan="$store.state.dialog.planForDialog" v-if="$store.state.dialog.planForDialog" />
     <div class="calendar">
-        <header><h1>Календарь</h1></header>
         <div class="menu">
-            <button @click="previous"><div class="arrow left"></div></button><button @click="next"><div class="arrow right"></div></button>
+            <button @click="previous" class="arrow-button"><icon name="angle-left" /></button
+            ><button @click="next" class="arrow-button"><icon name="angle-right" /></button>
             <h4>{{ month }}</h4>
+            <PrimaryBtn class="create-plan-btn" @click="createPlan"><icon name="plus" />Новый план</PrimaryBtn>
         </div>
         <Week :weekStart="periodStart" />
     </div>
 </template>
 
 <style scoped lang="scss">
-header h1 {
-    font-size: 24px;
-    padding: 4px;
-}
 .calendar {
-    height: 100dvh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    height: 100%;
     .menu {
         display: flex;
         align-items: center;
         padding: 8px;
-        border-bottom: 1px solid #999;
-        button {
+        border-bottom: 1px solid var(--border-color);
+        .arrow-button {
             border: none;
             border-radius: 100%;
             height: 2em;
@@ -69,22 +88,24 @@ header h1 {
             &:hover {
                 background-color: #eee;
             }
-            .arrow {
-                border-top: 2px solid #999;
-                border-left: 2px solid #999;
-                height: 1em;
-                width: 1em;
-                &.left {
-                    transform: translateX(0.25em) rotate(-45deg);
-                }
-                &.right {
-                    transform: translateX(-0.25em) rotate(135deg);
-                }
+            svg {
+                color: var(--border-color);
+                height: 100%;
+                width: 100%;
             }
         }
         h4 {
             font-size: 20px;
             margin-left: 20px;
+            color: #555;
+        }
+        .create-plan-btn {
+            margin-left: auto;
+            display: flex;
+            .plus {
+                height: 18px;
+                width: 18px;
+            }
         }
     }
 }

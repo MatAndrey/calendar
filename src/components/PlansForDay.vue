@@ -1,7 +1,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { uid } from "uid";
-import { usePlanStyles } from "../hooks/usePlanStyles";
 import type { PropType } from "vue";
 import type { Plan } from "../store/plansModule";
 
@@ -38,6 +37,7 @@ export default defineComponent({
                 completed: false,
                 id: uid(),
                 duration: 0,
+                color: "orange",
             };
             this.showModal(newPlan);
         },
@@ -62,8 +62,7 @@ export default defineComponent({
         },
         planStyles(plan: Plan) {
             const planHeight = (duration: number) => (duration / msInDay) * 100;
-            const planOffset = (startAt: number) =>
-                ((startAt - this.$props.date - new Date(this.$props.date).getTimezoneOffset() * 60 * 1000) / msInDay) * 100;
+            const planOffset = (startAt: number) => ((startAt - this.$props.date) / msInDay) * 100;
             const heightPercentage = planHeight(plan.duration);
             const offsetPercentage = planOffset(plan.startAt);
             let height = heightPercentage;
@@ -79,18 +78,22 @@ export default defineComponent({
                 top: top + "%",
             };
         },
+        isItToday() {
+            return Date.now() - this.$props.date <= msInDay && Date.now() - this.$props.date > 0;
+        },
+        currentTimeStyle() {
+            const now = new Date();
+            return { top: ((+now - this.$props.date) / msInDay) * 100 + "%" };
+        },
     },
 });
 </script>
 
 <template>
     <div class="plans-container" @click="createNewPlan">
-        <div class="hour-lines">
-            <div class="hour-line" v-for="_ in 25"></div>
-        </div>
         <div
             v-for="plan in $props.plans"
-            class="plan"
+            :class="`plan ${plan.color}`"
             :style="planStyles(plan)"
             :key="plan.id"
             @click.stop="showModal(plan)"
@@ -101,13 +104,14 @@ export default defineComponent({
             <h6 class="plan_title">{{ plan.title }}</h6>
             <p class="plan_description">{{ plan.description }}</p>
         </div>
+        <div v-if="isItToday()" class="current-time" :style="currentTimeStyle()"></div>
     </div>
 </template>
 
 <style scoped lang="scss">
 .plans-container {
     height: calc(var(--hour-height) * 24);
-    border-right: 1px solid #bbb;
+    border-right: 1px solid var(--border-secondary);
     box-sizing: border-box;
     width: 100%;
     position: relative;
@@ -115,22 +119,7 @@ export default defineComponent({
 .day:last-child .plans-container {
     border: none;
 }
-.hour-lines {
-    position: absolute;
-    z-index: -10;
-    top: 0;
-    left: 0;
-    right: 0;
-}
-.hour-line {
-    border-top: 1px solid #bbb;
-    height: calc(var(--hour-height));
-    box-sizing: border-box;
-    width: 100%;
-}
 .plan {
-    border: 1px solid rgb(250, 212, 176);
-    background-color: rgb(241, 225, 209);
     border-radius: 8px;
     padding: 4px 8px;
     min-height: 40px;
@@ -141,13 +130,42 @@ export default defineComponent({
     right: 0;
     position: absolute;
     box-sizing: border-box;
+    .plan_description {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        font-size: 14px;
+        color: #555;
+    }
+    &.orange {
+        background-color: rgb(241, 225, 209);
+    }
+    &.yellow {
+        background-color: rgb(245, 241, 173);
+    }
+    &.red {
+        background-color: rgb(255, 206, 206);
+    }
+    &.green {
+        background-color: rgb(216, 255, 215);
+    }
+    &.blue {
+        background-color: rgb(215, 228, 255);
+    }
 }
-.plan_description {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    font-size: 14px;
-    color: #555;
+
+.current-time {
+    border: 1px red solid;
+    width: 100%;
+    box-sizing: border-box;
+    position: absolute;
+    &::before {
+        content: "сейчас";
+        position: absolute;
+        bottom: 0;
+        color: var(--border-color);
+        z-index: -10;
+    }
 }
 </style>

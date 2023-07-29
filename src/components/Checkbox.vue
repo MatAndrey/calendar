@@ -11,7 +11,7 @@ export default {
 
 <template>
     <button class="checkbox" :class="active && 'active'">
-        <div class="check" v-if="active"></div>
+        <icon name="check" v-if="active" />
     </button>
 </template>
 
@@ -19,20 +19,18 @@ export default {
 .checkbox {
     width: 20px;
     height: 20px;
-    border: 1px solid #999;
+    border: 1px solid var(--border-color);
     border-radius: 100%;
     cursor: pointer;
+    padding: 0;
     &.active {
-        background-color: rgb(223, 144, 70);
+        background-color: var(--orange);
     }
-    .check {
-        border-bottom: 1px solid #fff;
-        border-left: 1px solid #fff;
-        width: 8px;
-        height: 5px;
-        transform: rotate(-45deg);
-        margin-top: -2px;
-        margin-left: -1px;
+    svg {
+        height: 15px;
+        width: 15px;
+        padding: 2px;
+        color: #fff;
     }
 }
 </style>

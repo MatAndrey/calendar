@@ -1,12 +1,14 @@
 import { Commit } from "vuex";
 
+export const colors = ["orange", "red", "green", "blue", "yellow"] as const;
+
 export interface Plan {
     startAt: number;
     duration: number;
     title: string;
     description: string;
     completed: boolean;
-    color?: string;
+    color: (typeof colors)[number];
     id: string;
 }
 
@@ -36,7 +38,7 @@ export const plansModule = {
                 const planIndex = state.plans.findIndex((plan) => plan.id === newPlan.id);
                 if (planIndex > -1) {
                     state.plans[planIndex] = newPlan;
-                } else if (newPlan.title !== "" && newPlan.description !== "") {
+                } else if (newPlan.title !== "" || newPlan.description !== "") {
                     state.plans.push(newPlan);
                 }
             }
@@ -52,6 +54,8 @@ export const plansModule = {
             //         title: "Plan 1",
             //         description: "first plan,first plan,first plan",
             //         completed: false,
+
+            // color: "orange",
             //     },
             //     {
             //         id: "2",
@@ -60,6 +64,7 @@ export const plansModule = {
             //         title: "Plan 2",
             //         description: "second plan,second plan,second plan, second plan,\nsecond plan,second plan, second plan,second plan,second plan",
             //         completed: false,
+            // color: "orange",
             //     },
             //     {
             //         id: "3",
@@ -68,6 +73,8 @@ export const plansModule = {
             //         title: "Saturday plan",
             //         description: "Washing, going for water, Washing, going for water, Washing, going for water, Washing, going for water",
             //         completed: false,
+
+            // color: "orange",
             //     },
             // ];
             const plans = JSON.parse(localStorage.getItem("plans") || "[]");

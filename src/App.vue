@@ -1,7 +1,7 @@
 <script lang="ts">
-import CalendarVue from "./components/Calendar.vue";
+import Layout from "./components/Layout.vue";
 export default {
-    components: { CalendarVue },
+    components: { Layout },
     mounted() {
         window.addEventListener("beforeunload", (event) => {
             const plans = this.$store.state.plan.plans;
@@ -12,7 +12,7 @@ export default {
 </script>
 
 <template>
-    <CalendarVue />
+    <Layout />
 </template>
 
 <style>
@@ -139,6 +139,13 @@ q:after {
 table {
     border-collapse: collapse;
     border-spacing: 0;
+}
+
+:root {
+    --border-color: #999;
+    --background-color: #fff;
+    --orange: rgb(223, 144, 70);
+    --border-secondary: #bbb;
 }
 
 @font-face {
