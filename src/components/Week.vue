@@ -1,8 +1,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import PlansForDay from "./PlansForDay.vue";
-import { useStore } from "vuex";
-import { State } from "@/store";
 import { Plan } from "@/store/plansModule";
 
 const dayNames = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"];
@@ -26,7 +24,7 @@ export default defineComponent({
         plansForDay(dayNumber: number): Plan[] {
             return this.plans.filter(
                 (plan) =>
-                    (plan.startAt >= this.$props.weekStart + (dayNumber - 1) * msInDay &&
+                    (plan.startAt > this.$props.weekStart + (dayNumber - 1) * msInDay &&
                         plan.startAt < this.$props.weekStart + dayNumber * msInDay) ||
                     (plan.startAt + plan.duration > this.$props.weekStart + (dayNumber - 1) * msInDay &&
                         plan.startAt + plan.duration < this.$props.weekStart + dayNumber * msInDay)
@@ -35,11 +33,12 @@ export default defineComponent({
     },
     computed: {
         plans(): Plan[] {
-            const store = useStore<State>();
-            store.dispatch("getPlans");
-            const plans = store.state.plan.plans;
+            const plans = this.$store.getters.sortedPlans;
             return plans;
         },
+    },
+    mounted() {
+        this.$store.dispatch("getPlans");
     },
 });
 </script>

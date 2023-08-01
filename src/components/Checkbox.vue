@@ -5,20 +5,22 @@ export default {
             type: Boolean,
             requiered: true,
         },
+        size: {
+            type: String,
+            default: "20px",
+        },
     },
 };
 </script>
 
 <template>
-    <button class="checkbox" :class="active && 'active'">
+    <button class="checkbox" :class="active && 'active'" :style="{ width: $props.size, height: $props.size }">
         <icon name="check" v-if="active" />
     </button>
 </template>
 
 <style scoped lang="scss">
 .checkbox {
-    width: 20px;
-    height: 20px;
     border: 1px solid var(--border-color);
     border-radius: 100%;
     cursor: pointer;
@@ -27,9 +29,8 @@ export default {
         background-color: var(--orange);
     }
     svg {
-        height: 15px;
-        width: 15px;
-        padding: 2px;
+        height: 75%;
+        width: 75%;
         color: #fff;
     }
 }

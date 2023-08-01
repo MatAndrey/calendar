@@ -4,6 +4,7 @@ import { PropType, defineComponent } from "vue";
 import Checkbox from "./Checkbox.vue";
 import PrimaryBtn from "./PrimaryBtn.vue";
 import VFocus from "../directives/VFocus";
+import { formatDate } from "../helpers/formatDate";
 
 export default defineComponent({
     props: {
@@ -13,19 +14,13 @@ export default defineComponent({
         },
     },
     methods: {
-        formatDate(timestamp: number) {
-            const date = new Date(timestamp);
-            const hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-            const minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-            return hours + ":" + minutes;
-        },
+        formatDate,
         formatDuration(duration: number) {
             return String(duration / 1000 / 60 / 60).slice(0, 4);
         },
         saveChanges() {
             this.$store.commit("editPlan", {
                 ...this.$props.plan,
-                title: this.title,
                 description: this.description,
                 completed: this.completed,
                 startAt: this.startAt,
@@ -60,10 +55,16 @@ export default defineComponent({
             const target = event.target as HTMLInputElement;
             this.color = target.dataset.color as (typeof colors)[number];
         },
+        changeDate(event: Event) {
+            const target = event.target as HTMLInputElement;
+            const [year, month, date] = target.value.split("-");
+            const planDate = new Date(this.startAt);
+            planDate.setFullYear(+year, +month - 1, +date);
+            this.startAt = +planDate;
+        },
     },
     data() {
         return {
-            title: this.$props.plan.title,
             description: this.$props.plan.description,
             completed: this.$props.plan.completed,
             startAt: this.$props.plan.startAt,
@@ -80,15 +81,12 @@ export default defineComponent({
 <template>
     <div class="modal_container" @click="$store.commit('closeModal')" @keydown="(e) => e.key === 'Escape' && $store.commit('closeModal')">
         <div class="modal" @click.stop :style="`border: 1px solid ${color};`">
-            <div class="heading">
-                <Checkbox :active="completed" @click="$data.completed = !$data.completed" />
-                <input type="text" v-model="title" placeholder="План..." />
-            </div>
             <textarea v-model="description" placeholder="Описание плана..." v-focus></textarea>
             <div class="time-settings">
-                <label>Начало <input type="time" @change="changeStart" :value="formatDate(startAt)" /></label>
+                <label>Начало <input type="time" @change="changeStart" :value="formatDate(startAt, 'hh:mm')" /></label>
                 <label>Длительность <input type="number" min="0" @change="changeDuration" :value="formatDuration(duration)" step="0.5" /></label>
-                <label>Окончание <input type="time" @focusout="changeEnd" :value="formatDate(startAt + duration)" /></label>
+                <label>Окончание <input type="time" @focusout="changeEnd" :value="formatDate(startAt + duration, 'hh:mm')" /></label>
+                <label>Дата <input type="date" :value="formatDate(startAt, 'YYYY-MM-DD')" @focusout="changeDate" /></label>
             </div>
             <footer>
                 <div class="colors">
@@ -121,24 +119,12 @@ export default defineComponent({
     padding: 16px;
     border-radius: 16px;
 
-    .heading {
-        display: flex;
-        button {
-            margin: auto 4px;
-        }
-        input {
-            font-size: 20px;
-            padding: 2px;
-            border: none;
-        }
-    }
-
     textarea {
         width: 100%;
         margin-top: 4px;
         max-height: 400px;
         resize: vertical;
-        height: 25em;
+        height: 15em;
         font-family: Roboto;
         font-size: 16px;
         padding: 4px;
@@ -148,10 +134,11 @@ export default defineComponent({
 
     .time-settings {
         display: flex;
-        margin-top: 4px;
+        flex-wrap: wrap;
         label {
-            width: 33%;
+            width: 50%;
             padding: 4px;
+            box-sizing: border-box;
             input {
                 height: 20px;
                 padding: 2px;
@@ -198,11 +185,17 @@ export default defineComponent({
                     border: 1px solid var(--border-color);
                     border-radius: 50%;
                     padding: 1px;
-                    height: 20px;
                     box-sizing: border-box;
                 }
             }
         }
+    }
+}
+
+@media (max-width: 434px) {
+    .modal {
+        width: 100vw;
+        height: 100dvh;
     }
 }
 </style>

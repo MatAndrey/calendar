@@ -4,11 +4,10 @@ import PlanDialog from "../components/PlanDialog.vue";
 import PrimaryBtn from "../components/PrimaryBtn.vue";
 import { defineComponent } from "vue";
 import { uid } from "uid";
-
-const months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+import { formatDate } from "../helpers/formatDate";
 
 const weekStart = new Date();
-weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1);
+weekStart.setDate(weekStart.getDate() - (weekStart.getDay() || 7) + 1);
 weekStart.setHours(0, 0, 0, 0);
 
 export default defineComponent({
@@ -24,6 +23,7 @@ export default defineComponent({
         };
     },
     methods: {
+        formatDate,
         next() {
             this.periodStart += this.periodDuration;
         },
@@ -47,8 +47,7 @@ export default defineComponent({
     },
     computed: {
         month() {
-            const date = new Date(this.periodStart);
-            return months[date.getMonth()] + " " + date.getFullYear();
+            return formatDate(this.periodStart, "month YYYY");
         },
     },
 });

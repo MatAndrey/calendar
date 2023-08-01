@@ -3,6 +3,8 @@ import { defineComponent } from "vue";
 import { uid } from "uid";
 import type { PropType } from "vue";
 import type { Plan } from "../store/plansModule";
+import Checkbox from "./Checkbox.vue";
+import { round } from "@/helpers/roud";
 
 const msInDay = 1000 * 60 * 60 * 24;
 
@@ -19,35 +21,46 @@ export default defineComponent({
     },
     data() {
         return {
-            dradStartEvent: null as null | DragEvent,
+            dragStartEvent: null as null | DragEvent,
+            createStartEvent: null as null | MouseEvent,
         };
     },
     methods: {
         showModal(plan: Plan) {
             this.$store.commit("openModal", plan);
         },
-        createNewPlan(event: MouseEvent) {
-            const { offsetY } = event;
-            const containerHeight = 24 * 40;
-            const timeOfset = msInDay * (offsetY / containerHeight);
-            const newPlan: Plan = {
-                title: "",
-                description: "",
-                startAt: this.$props.date + timeOfset,
-                completed: false,
-                id: uid(),
-                duration: 0,
-                color: "orange",
-            };
-            this.showModal(newPlan);
+        createStart(event: MouseEvent) {
+            this.createStartEvent = event;
+        },
+        createEnd(event: MouseEvent) {
+            if (this.createStartEvent) {
+                const point1 = this.createStartEvent.offsetY;
+                const point2 = event.offsetY;
+                const startOffset = Math.min(point1, point2);
+                const endOffset = Math.max(point1, point2);
+
+                const containerHeight = 24 * 40;
+                const startAt = round(msInDay * (startOffset / containerHeight), 600000);
+                const duration = round(msInDay * ((endOffset - startOffset) / containerHeight), 600000);
+
+                const newPlan: Plan = {
+                    description: "",
+                    startAt: this.$props.date + startAt,
+                    completed: false,
+                    id: uid(),
+                    duration,
+                    color: "orange",
+                };
+                this.showModal(newPlan);
+            }
         },
         dragStart(event: DragEvent) {
-            this.dradStartEvent = event;
+            this.dragStartEvent = event;
         },
         dragEnd(event: DragEvent, plan: Plan) {
-            if (this.dradStartEvent) {
-                const shiftX = event.pageX - this.dradStartEvent.pageX;
-                const shiftY = event.pageY - this.dradStartEvent.pageY;
+            if (this.dragStartEvent) {
+                const shiftX = event.pageX - this.dragStartEvent.pageX;
+                const shiftY = event.pageY - this.dragStartEvent.pageY;
                 const planElem = event.target as HTMLElement;
                 const containerStyles = getComputedStyle(planElem.parentElement as HTMLElement);
                 const containerWidth = parseFloat(containerStyles.width);
@@ -58,6 +71,7 @@ export default defineComponent({
                 if (dayNumber === 0 && daysShift > 0) daysShift = 0;
                 if (daysShift + dayNumber < 1 && dayNumber !== 0) daysShift = 0;
                 plan.startAt += daysShift * 24 * 60 * 60 * 1000;
+                this.$store.commit("editPlan", plan);
             }
         },
         planStyles(plan: Plan) {
@@ -82,15 +96,19 @@ export default defineComponent({
             return Date.now() - this.$props.date <= msInDay && Date.now() - this.$props.date > 0;
         },
         currentTimeStyle() {
-            const now = new Date();
-            return { top: ((+now - this.$props.date) / msInDay) * 100 + "%" };
+            return { top: ((Date.now() - this.$props.date) / msInDay) * 100 + "%" };
+        },
+        completePlan(plan: Plan) {
+            plan.completed = true;
+            this.$store.commit("editPlan", plan);
         },
     },
+    components: { Checkbox },
 });
 </script>
 
 <template>
-    <div class="plans-container" @click="createNewPlan">
+    <div class="plans-container" @pointerdown.self="createStart" @pointerup.self="createEnd">
         <div
             v-for="plan in $props.plans"
             :class="`plan ${plan.color}`"
@@ -101,8 +119,7 @@ export default defineComponent({
             @dragend="(e) => dragEnd(e, plan)"
             draggable="true"
         >
-            <h6 class="plan_title">{{ plan.title }}</h6>
-            <p class="plan_description">{{ plan.description }}</p>
+            <p class="plan_description"><Checkbox size="14px" @click.stop="completePlan(plan)" />{{ plan.description }}</p>
         </div>
         <div v-if="isItToday()" class="current-time" :style="currentTimeStyle()"></div>
     </div>
@@ -121,8 +138,8 @@ export default defineComponent({
 }
 .plan {
     border-radius: 8px;
-    padding: 4px 8px;
-    min-height: 40px;
+    padding: 3px 8px;
+    min-height: 20px;
     margin: 0 2px;
     overflow: hidden;
     cursor: pointer;
@@ -132,7 +149,7 @@ export default defineComponent({
     box-sizing: border-box;
     .plan_description {
         overflow: hidden;
-        display: -webkit-box;
+        display: flex;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 1;
         font-size: 14px;

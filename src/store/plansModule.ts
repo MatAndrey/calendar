@@ -5,7 +5,6 @@ export const colors = ["orange", "red", "green", "blue", "yellow"] as const;
 export interface Plan {
     startAt: number;
     duration: number;
-    title: string;
     description: string;
     completed: boolean;
     color: (typeof colors)[number];
@@ -38,7 +37,7 @@ export const plansModule = {
                 const planIndex = state.plans.findIndex((plan) => plan.id === newPlan.id);
                 if (planIndex > -1) {
                     state.plans[planIndex] = newPlan;
-                } else if (newPlan.title !== "" || newPlan.description !== "") {
+                } else if (newPlan.description !== "") {
                     state.plans.push(newPlan);
                 }
             }
@@ -46,39 +45,14 @@ export const plansModule = {
     },
     actions: {
         async getPlans({ commit }: { commit: Commit }) {
-            // const plans = [
-            //     {
-            //         id: "1",
-            //         startAt: Date.now() + 1000 * 60 * 60,
-            //         duration: 1000 * 60 * 60 * 2,
-            //         title: "Plan 1",
-            //         description: "first plan,first plan,first plan",
-            //         completed: false,
-
-            // color: "orange",
-            //     },
-            //     {
-            //         id: "2",
-            //         startAt: Date.now() + 1000 * 60 * 60 * 4,
-            //         duration: 1000 * 60 * 60 * 1.5,
-            //         title: "Plan 2",
-            //         description: "second plan,second plan,second plan, second plan,\nsecond plan,second plan, second plan,second plan,second plan",
-            //         completed: false,
-            // color: "orange",
-            //     },
-            //     {
-            //         id: "3",
-            //         startAt: 1690063200000,
-            //         duration: 1000 * 60 * 60 * 3,
-            //         title: "Saturday plan",
-            //         description: "Washing, going for water, Washing, going for water, Washing, going for water, Washing, going for water",
-            //         completed: false,
-
-            // color: "orange",
-            //     },
-            // ];
             const plans = JSON.parse(localStorage.getItem("plans") || "[]");
+            console.log("fetched plans");
             commit("setPlans", plans);
+        },
+    },
+    getters: {
+        sortedPlans(state: plansState) {
+            return [...state.plans].sort((a, b) => a.startAt - b.startAt);
         },
     },
 };
