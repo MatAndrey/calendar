@@ -40,8 +40,8 @@ export default defineComponent({
                 const endOffset = Math.max(point1, point2);
 
                 const containerHeight = 24 * 40;
-                const startAt = round(msInDay * (startOffset / containerHeight), 600000);
-                const duration = round(msInDay * ((endOffset - startOffset) / containerHeight), 600000);
+                const startAt = round(msInDay * (startOffset / containerHeight), 1800000);
+                const duration = round(msInDay * ((endOffset - startOffset) / containerHeight), 1800000);
 
                 const newPlan: Plan = {
                     description: "",
@@ -71,7 +71,7 @@ export default defineComponent({
                 if (dayNumber === 0 && daysShift > 0) daysShift = 0;
                 if (daysShift + dayNumber < 1 && dayNumber !== 0) daysShift = 0;
                 plan.startAt += daysShift * 24 * 60 * 60 * 1000;
-                this.$store.commit("editPlan", plan);
+                plan.startAt = round(plan.startAt, 1800000);
             }
         },
         planStyles(plan: Plan) {
@@ -154,6 +154,9 @@ export default defineComponent({
         -webkit-line-clamp: 1;
         font-size: 14px;
         color: #555;
+        button {
+            margin-right: 4px;
+        }
     }
     &.orange {
         background-color: rgb(241, 225, 209);

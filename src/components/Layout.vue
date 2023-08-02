@@ -44,7 +44,6 @@ export default {
     height: 100dvh;
 
     main {
-        overflow: hidden;
         height: calc(100% - 35px);
     }
     .left-menu {

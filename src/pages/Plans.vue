@@ -6,7 +6,7 @@ export default {
     components: { PlansList },
     computed: {
         plans(): Plan[] {
-            this.$store.commit("getPlans");
+            this.$store.dispatch("getPlans");
             const plans = this.$store.state.plan.plans;
             return plans;
         },

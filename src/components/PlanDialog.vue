@@ -18,6 +18,9 @@ export default defineComponent({
         formatDuration(duration: number) {
             return String(duration / 1000 / 60 / 60).slice(0, 4);
         },
+        closeModal() {
+            this.$store.commit("closeModal");
+        },
         saveChanges() {
             this.$store.commit("editPlan", {
                 ...this.$props.plan,
@@ -27,7 +30,7 @@ export default defineComponent({
                 duration: this.duration,
                 color: this.color,
             });
-            this.$store.commit("closeModal");
+            this.closeModal();
         },
         changeStart(event: Event) {
             const target = event.target as HTMLInputElement;
@@ -79,8 +82,9 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="modal_container" @click="$store.commit('closeModal')" @keydown="(e) => e.key === 'Escape' && $store.commit('closeModal')">
+    <div class="modal_container" @click="closeModal" @keydown="(e) => e.key === 'Escape' && closeModal()">
         <div class="modal" @click.stop :style="`border: 1px solid ${color};`">
+            <button class="closeButton" @click="closeModal"><icon name="xmark" /></button>
             <textarea v-model="description" placeholder="Описание плана..." v-focus></textarea>
             <div class="time-settings">
                 <label>Начало <input type="time" @change="changeStart" :value="formatDate(startAt, 'hh:mm')" /></label>
@@ -119,9 +123,20 @@ export default defineComponent({
     padding: 16px;
     border-radius: 16px;
 
+    .closeButton {
+        border: none;
+        background-color: inherit;
+        cursor: pointer;
+        padding: 0;
+        float: right;
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
     textarea {
         width: 100%;
-        margin-top: 4px;
         max-height: 400px;
         resize: vertical;
         height: 15em;
