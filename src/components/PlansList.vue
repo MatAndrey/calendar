@@ -20,7 +20,11 @@ export default {
                 const plan = plans[i];
                 if (plan.startAt < +now && new Date(plan.startAt).getDate() !== now.getDate()) {
                     days[0].push(plan);
-                } else if (plan.startAt > plans[i - 1].startAt && new Date(plan.startAt).getDate() !== new Date(plans[i - 1].startAt).getDate()) {
+                } else if (
+                    i > 0 &&
+                    plan.startAt > plans[i - 1].startAt &&
+                    new Date(plan.startAt).getDate() !== new Date(plans[i - 1].startAt).getDate()
+                ) {
                     days.push([plan]);
                 } else {
                     days.at(-1)?.push(plan);

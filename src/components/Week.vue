@@ -67,6 +67,7 @@ export default defineComponent({
 .week {
     --hour-height: 40px;
     overflow: hidden;
+    margin-left: 4px;
 }
 .days_container {
     display: flex;
@@ -96,7 +97,6 @@ export default defineComponent({
 .hour-line {
     border-top: 1px solid var(--border-secondary);
     height: calc(var(--hour-height));
-    box-sizing: border-box;
     width: 100%;
 }
 .day {

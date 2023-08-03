@@ -82,8 +82,8 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="modal_container" @click="closeModal" @keydown="(e) => e.key === 'Escape' && closeModal()">
-        <div class="modal" @click.stop :style="`border: 1px solid ${color};`">
+    <div class="modal_container" @pointerdown="closeModal" @keydown="(e) => e.key === 'Escape' && closeModal()">
+        <div class="modal" @pointerdown.stop :style="`border: 1px solid ${color};`">
             <button class="closeButton" @click="closeModal"><icon name="xmark" /></button>
             <textarea v-model="description" placeholder="Описание плана..." v-focus></textarea>
             <div class="time-settings">
@@ -143,7 +143,6 @@ export default defineComponent({
         font-family: Roboto;
         font-size: 16px;
         padding: 4px;
-        box-sizing: border-box;
         border-radius: 8px;
     }
 
@@ -153,7 +152,6 @@ export default defineComponent({
         label {
             width: 50%;
             padding: 4px;
-            box-sizing: border-box;
             input {
                 height: 20px;
                 padding: 2px;
@@ -163,7 +161,6 @@ export default defineComponent({
                 margin-top: 2px;
                 border-radius: 4px;
                 width: 100%;
-                box-sizing: border-box;
             }
         }
     }
@@ -192,7 +189,6 @@ export default defineComponent({
                 border: 1px solid var(--border-color);
                 background-color: #fff;
                 cursor: pointer;
-                box-sizing: border-box;
             }
             .color_container {
                 margin-right: 4px;
@@ -200,7 +196,6 @@ export default defineComponent({
                     border: 1px solid var(--border-color);
                     border-radius: 50%;
                     padding: 1px;
-                    box-sizing: border-box;
                 }
             }
         }

@@ -123,7 +123,6 @@ export default defineComponent({
 .plans-container {
     height: calc(var(--hour-height) * 24);
     border-right: 1px solid var(--border-secondary);
-    box-sizing: border-box;
     width: 100%;
     position: relative;
 }
@@ -138,7 +137,6 @@ export default defineComponent({
 .current-time {
     border: 1px red solid;
     width: 100%;
-    box-sizing: border-box;
     position: absolute;
     &::before {
         content: "сейчас";

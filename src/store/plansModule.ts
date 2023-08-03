@@ -20,12 +20,13 @@ export const plansModule = {
     state(): plansState {
         return {
             plans: [],
-            isLoading: false,
+            isLoading: true,
         };
     },
     mutations: {
         setPlans(state: plansState, plans: Plan[]) {
             state.plans = plans;
+            state.isLoading = false;
         },
         editPlan(state: plansState, newPlan: Plan) {
             if (newPlan.completed) {

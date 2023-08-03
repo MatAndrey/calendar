@@ -2,12 +2,6 @@
 import Layout from "./components/Layout.vue";
 export default {
     components: { Layout },
-    mounted() {
-        window.addEventListener("beforeunload", (event) => {
-            const plans = this.$store.state.plan.plans;
-            localStorage.setItem("plans", JSON.stringify(plans));
-        });
-    },
 };
 </script>
 
@@ -139,6 +133,10 @@ q:after {
 table {
     border-collapse: collapse;
     border-spacing: 0;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 :root {

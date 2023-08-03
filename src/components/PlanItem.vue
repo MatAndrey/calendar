@@ -40,7 +40,6 @@ export default {
     padding: 3px 8px;
     cursor: pointer;
     width: 100%;
-    box-sizing: border-box;
     .plan_description {
         overflow-wrap: break-word;
         font-size: 14px;
