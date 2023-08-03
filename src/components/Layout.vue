@@ -1,9 +1,10 @@
 <script lang="ts">
 import Calendar from "../pages/Calendar.vue";
 import Header from "./Header.vue";
+import PlanDialog from "../components/PlanDialog.vue";
 
 export default {
-    components: { Calendar, Header },
+    components: { Calendar, Header, PlanDialog },
     data() {
         return {
             isLeftMenuOpened: false,
@@ -18,6 +19,7 @@ export default {
 </script>
 
 <template>
+    <PlanDialog :plan="$store.state.dialog.planForDialog" v-if="$store.state.dialog.planForDialog" />
     <Header @toggleMenu="toggleLeftMenu" />
     <div class="left-menu" v-if="isLeftMenuOpened" @click="toggleLeftMenu">
         <nav @click.stop>

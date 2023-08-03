@@ -1,4 +1,5 @@
 const months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+const daysOfWeek = ["вс", "пн", "вт", "ср", "чт", "пт", "сб"];
 
 export function formatDate(date: Date | number, format: string) {
     if (typeof date === "number") {
@@ -16,6 +17,7 @@ export function formatDate(date: Date | number, format: string) {
     result = result.replace("MM", String(month));
     result = result.replace("month", months[date.getMonth()]);
     result = result.replace("DD", String(day));
+    result = result.replace("day", daysOfWeek[date.getDay()]);
     result = result.replace("hh", String(hours));
     result = result.replace("mm", String(minutes));
     result = result.replace("ss", String(seconds));

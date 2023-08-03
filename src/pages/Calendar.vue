@@ -1,6 +1,5 @@
 <script lang="ts">
 import Week from "../components/Week.vue";
-import PlanDialog from "../components/PlanDialog.vue";
 import PrimaryBtn from "../components/PrimaryBtn.vue";
 import { defineComponent } from "vue";
 import { uid } from "uid";
@@ -13,7 +12,6 @@ weekStart.setHours(0, 0, 0, 0);
 export default defineComponent({
     components: {
         Week,
-        PlanDialog,
         PrimaryBtn,
     },
     data() {
@@ -54,7 +52,6 @@ export default defineComponent({
 </script>
 
 <template>
-    <PlanDialog :plan="$store.state.dialog.planForDialog" v-if="$store.state.dialog.planForDialog" />
     <div class="calendar">
         <div class="menu">
             <button @click="previous" class="arrow-button"><icon name="angle-left" /></button

@@ -46,7 +46,6 @@ export const plansModule = {
     actions: {
         async getPlans({ commit }: { commit: Commit }) {
             const plans = JSON.parse(localStorage.getItem("plans") || "[]");
-            console.log("fetched plans");
             commit("setPlans", plans);
         },
     },

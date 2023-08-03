@@ -5,6 +5,7 @@ import type { PropType } from "vue";
 import type { Plan } from "../store/plansModule";
 import Checkbox from "./Checkbox.vue";
 import { round } from "@/helpers/roud";
+import PlanItem from "./PlanItem.vue";
 
 const msInDay = 1000 * 60 * 60 * 24;
 
@@ -98,29 +99,22 @@ export default defineComponent({
         currentTimeStyle() {
             return { top: ((Date.now() - this.$props.date) / msInDay) * 100 + "%" };
         },
-        completePlan(plan: Plan) {
-            plan.completed = true;
-            this.$store.commit("editPlan", plan);
-        },
     },
-    components: { Checkbox },
+    components: { Checkbox, PlanItem },
 });
 </script>
 
 <template>
     <div class="plans-container" @pointerdown.self="createStart" @pointerup.self="createEnd">
-        <div
+        <PlanItem
+            :plan="plan"
             v-for="plan in $props.plans"
-            :class="`plan ${plan.color}`"
-            :style="planStyles(plan)"
-            :key="plan.id"
-            @click.stop="showModal(plan)"
             @dragstart="dragStart"
             @dragend="(e) => dragEnd(e, plan)"
             draggable="true"
-        >
-            <p class="plan_description"><Checkbox size="14px" @click.stop="completePlan(plan)" />{{ plan.description }}</p>
-        </div>
+            :key="plan.id"
+            :style="planStyles(plan)"
+        />
         <div v-if="isItToday()" class="current-time" :style="currentTimeStyle()"></div>
     </div>
 </template>
@@ -137,42 +131,8 @@ export default defineComponent({
     border: none;
 }
 .plan {
-    border-radius: 8px;
-    padding: 3px 8px;
     min-height: 20px;
-    margin: 0 2px;
-    overflow: hidden;
-    cursor: pointer;
-    left: 0;
-    right: 0;
     position: absolute;
-    box-sizing: border-box;
-    .plan_description {
-        overflow: hidden;
-        display: flex;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 1;
-        font-size: 14px;
-        color: #555;
-        button {
-            margin-right: 4px;
-        }
-    }
-    &.orange {
-        background-color: rgb(241, 225, 209);
-    }
-    &.yellow {
-        background-color: rgb(245, 241, 173);
-    }
-    &.red {
-        background-color: rgb(255, 206, 206);
-    }
-    &.green {
-        background-color: rgb(216, 255, 215);
-    }
-    &.blue {
-        background-color: rgb(215, 228, 255);
-    }
 }
 
 .current-time {

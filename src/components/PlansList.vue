@@ -1,7 +1,8 @@
 <script lang="ts">
 import { Plan } from "@/store/plansModule";
 import { PropType } from "vue";
-import PlansListItem from "./PlansListItem.vue";
+import { formatDate } from "../helpers/formatDate";
+import PlanItem from "./PlanItem.vue";
 
 export default {
     props: {
@@ -25,17 +26,51 @@ export default {
                     days.at(-1)?.push(plan);
                 }
             }
-            console.log(days);
             return days;
         },
     },
-    components: { PlansListItem },
+    methods: {
+        formatHeading(timestamp: number) {
+            const date = new Date(timestamp).setHours(0, 0, 0, 0);
+            const now = new Date().setHours(0, 0, 0, 0);
+            if (date < now) {
+                return "Прошедшие";
+            } else if (date === now) {
+                return formatDate(timestamp, "DD.MM day") + ", сегодня";
+            } else if (date === now + 24 * 60 * 60 * 1000) {
+                return formatDate(timestamp, "DD.MM day") + ", завтра";
+            } else {
+                return formatDate(timestamp, "DD.MM day");
+            }
+        },
+    },
+    components: { PlanItem },
 };
 </script>
 
 <template>
-    <!-- <PlansListItem v-for="plan in plans" :plan="plan" /> -->
-    <pre> {{ JSON.stringify(days, null, 4) }}</pre>
+    <div class="plans-list">
+        <div class="plans-for-day" v-for="day in days">
+            <h4>{{ formatHeading(day[0].startAt) }}</h4>
+            <PlanItem v-for="plan in day" :plan="plan" />
+        </div>
+    </div>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+.plans-list {
+    max-width: 600px;
+    margin: auto;
+    .plans-for-day {
+        h4 {
+            font-size: 20px;
+            color: var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 4px;
+        }
+        .plan {
+            margin-bottom: 6px;
+        }
+    }
+}
+</style>
