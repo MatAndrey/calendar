@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Plan, colors } from "../store/plansModule";
+import { Plan, colors, planTypes } from "../store/plansModule";
 import { PropType, defineComponent } from "vue";
 import Checkbox from "./Checkbox.vue";
 import PrimaryBtn from "./PrimaryBtn.vue";
@@ -56,7 +56,7 @@ export default defineComponent({
         },
         chengeColor(event: Event) {
             const target = event.target as HTMLInputElement;
-            this.color = target.dataset.color as (typeof colors)[number];
+            this.color = target.dataset.color as keyof typeof planTypes;
         },
         changeDate(event: Event) {
             const target = event.target as HTMLInputElement;
@@ -73,7 +73,7 @@ export default defineComponent({
             startAt: this.$props.plan.startAt,
             duration: this.$props.plan.duration,
             color: this.$props.plan.color,
-            colors,
+            planTypes,
         };
     },
     components: { Checkbox, PrimaryBtn },
@@ -82,9 +82,9 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="modal_container" @pointerdown="closeModal" @keydown="(e) => e.key === 'Escape' && closeModal()">
-        <div class="modal" @pointerdown.stop :style="`border: 1px solid ${color};`">
-            <button class="closeButton" @click="closeModal"><icon name="xmark" /></button>
+    <div class="modal_container" @pointerdown.self.stop="closeModal" @keydown="(e) => e.key === 'Escape' && closeModal()">
+        <div class="modal" @pointerup.stop :style="`border: 1px solid ${color};`">
+            <button class="closeButton" @click.stop="closeModal"><icon name="xmark" /></button>
             <textarea v-model="description" placeholder="Описание плана..." v-focus></textarea>
             <div class="time-settings">
                 <label>Начало <input type="time" @change="changeStart" :value="formatDate(startAt, 'hh:mm')" /></label>
@@ -94,8 +94,8 @@ export default defineComponent({
             </div>
             <footer>
                 <div class="colors">
-                    <div class="color_container" v-for="c in colors" :class="c === color && 'active'">
-                        <div class="color" :style="`background-color: ${c};`" :data-color="c" @click="chengeColor"></div>
+                    <div class="color_container" v-for="(opt, c) in planTypes" :class="c === color && 'active'">
+                        <div class="color" :style="`background-color: ${opt.color};`" :data-color="c" @click="chengeColor" :title="opt.title"></div>
                     </div>
                 </div>
                 <PrimaryBtn @click="saveChanges"><icon name="floppy-disk" />Сохранить</PrimaryBtn>

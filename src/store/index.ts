@@ -7,9 +7,10 @@ export interface State {
     plan: plansState;
 }
 
-export default createStore<State>({
+const store = createStore<State>({
     modules: {
         dialog: dialogModule,
         plan: plansModule,
     },
 });
+export default store;

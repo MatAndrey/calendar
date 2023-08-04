@@ -54,10 +54,10 @@ export default defineComponent({
 <template>
     <div class="calendar">
         <div class="menu">
-            <button @click="previous" class="arrow-button"><icon name="angle-left" /></button
-            ><button @click="next" class="arrow-button"><icon name="angle-right" /></button>
+            <button @click.self="previous" class="arrow-button"><icon name="angle-left" /></button
+            ><button @click.self="next" class="arrow-button"><icon name="angle-right" /></button>
             <h4>{{ month }}</h4>
-            <PrimaryBtn class="create-plan-btn" @click="createPlan"><icon name="plus" />Новый план</PrimaryBtn>
+            <PrimaryBtn class="create-plan-btn" @click.self="createPlan"><icon name="plus" />Новый план</PrimaryBtn>
         </div>
         <Week :weekStart="periodStart" />
     </div>

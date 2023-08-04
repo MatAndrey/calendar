@@ -2,7 +2,7 @@
 import { defineComponent } from "vue";
 import { uid } from "uid";
 import type { PropType } from "vue";
-import type { Plan } from "../store/plansModule";
+import { type Plan } from "../store/plansModule";
 import Checkbox from "./Checkbox.vue";
 import { round } from "@/helpers/roud";
 import PlanItem from "./PlanItem.vue";
@@ -50,9 +50,10 @@ export default defineComponent({
                     completed: false,
                     id: uid(),
                     duration,
-                    color: "orange",
+                    color: "red",
                 };
                 this.showModal(newPlan);
+                this.createStartEvent = null;
             }
         },
         dragStart(event: DragEvent) {
@@ -73,6 +74,7 @@ export default defineComponent({
                 if (daysShift + dayNumber < 1 && dayNumber !== 0) daysShift = 0;
                 plan.startAt += daysShift * 24 * 60 * 60 * 1000;
                 plan.startAt = round(plan.startAt, 1800000);
+                this.dragStartEvent = null;
             }
         },
         planStyles(plan: Plan) {

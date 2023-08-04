@@ -67,7 +67,6 @@ export default defineComponent({
 .week {
     --hour-height: 40px;
     overflow: hidden;
-    margin-left: 4px;
 }
 .days_container {
     display: flex;
@@ -77,11 +76,12 @@ export default defineComponent({
 .time-marks {
     color: #999;
     padding-top: calc(72px - 0.5em);
-    z-index: 9;
+    padding-left: 4px;
+    z-index: 1;
     position: sticky;
     left: 0;
     background-color: var(--background-color);
-    height: calc(var(--hour-height) * 25);
+    height: calc(var(--hour-height) * 26);
 }
 .time-mark {
     height: var(--hour-height);
@@ -114,7 +114,7 @@ export default defineComponent({
     background-color: var(--background-color);
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 2;
 }
 .day-number,
 .day-name {

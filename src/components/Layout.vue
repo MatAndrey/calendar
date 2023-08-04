@@ -24,7 +24,7 @@ export default {
             <button class="left-menu-switch"><icon name="bars" @click="toggleLeftMenu" /></button>
             <ul>
                 <li>
-                    <RouterLink to="/" @click="isLeftMenuOpened = false"><icon name="calendar-week" />Календарь</RouterLink>
+                    <RouterLink to="/" @click="isLeftMenuOpened = false"><icon name="calendar-week" />Расписание</RouterLink>
                 </li>
                 <li>
                     <RouterLink to="/plans" @click="isLeftMenuOpened = false"><icon name="list" />Список планов</RouterLink>
@@ -50,8 +50,9 @@ export default {
     }
 
     .left-menu {
-        background-color: #eee;
-        z-index: 100;
+        background-color: #fcfcfc;
+        border-right: 1px solid var(--border-color);
+        z-index: 20;
         position: absolute;
         height: 100%;
         &.closed {
@@ -81,6 +82,7 @@ export default {
                 }
             }
         }
+        transition: width 0.2s;
 
         .left-menu-switch {
             border: none;
