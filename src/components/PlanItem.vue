@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Plan, planTypes } from "@/store/plansModule";
+import { Plan } from "@/store/plansModule";
 import { PropType } from "vue";
 import Checkbox from "./Checkbox.vue";
 
@@ -22,17 +22,11 @@ export default {
     components: {
         Checkbox,
     },
-    computed: {
-        bgColor() {
-            console.log(this.$props.plan);
-            return `background-color: ${planTypes[this.$props.plan.color].color};`;
-        },
-    },
 };
 </script>
 
 <template>
-    <div :key="plan.id" @click.stop="showModal(plan)" class="plan" :style="bgColor">
+    <div :key="plan.id" @click.stop="showModal(plan)" :class="'plan ' + plan.color">
         <div class="plan_description">
             <Checkbox size="14px" @click.stop="completePlan(plan)" />
             <p>{{ plan.description }}</p>
@@ -49,7 +43,7 @@ export default {
     .plan_description {
         overflow-wrap: break-word;
         font-size: 14px;
-        color: #555;
+        color: var(--text-secondary);
         height: 100%;
         overflow: hidden;
         button {

@@ -26,7 +26,7 @@ export default {
     cursor: pointer;
     padding: 0;
     &.active {
-        background-color: var(--orange);
+        background-color: var(--main-color);
     }
     svg {
         height: 75%;

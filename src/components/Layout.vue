@@ -1,9 +1,10 @@
 <script lang="ts">
 import Calendar from "../pages/Calendar.vue";
 import PlanDialog from "../components/PlanDialog.vue";
+import ThemeButton from "./ThemeButton.vue";
 
 export default {
-    components: { Calendar, PlanDialog },
+    components: { Calendar, PlanDialog, ThemeButton },
     data() {
         return {
             isLeftMenuOpened: false,
@@ -31,6 +32,7 @@ export default {
                 </li>
             </ul>
         </nav>
+        <ThemeButton v-if="isLeftMenuOpened" />
     </div>
     <main>
         <RouterView />
@@ -43,40 +45,42 @@ export default {
     flex-direction: row;
     height: 100dvh;
     width: 100%;
+    --left-menu-width: 40px;
 
     main {
-        width: calc(100% - 32px);
-        margin-left: 32px;
+        width: calc(100% - var(--left-menu-width));
+        margin-left: var(--left-menu-width);
     }
 
     .left-menu {
-        background-color: #fcfcfc;
+        background-color: var(--background-color);
         border-right: 1px solid var(--border-color);
         z-index: 20;
         position: absolute;
         height: 100%;
         &.closed {
-            width: 32px;
+            width: var(--left-menu-width);
         }
         &.opened {
             width: 300px;
         }
         nav {
             ul {
-                height: 20px;
                 line-height: 2em;
                 a {
                     align-items: center;
-                    color: #111;
+                    color: var(--text-color);
                     text-decoration: none;
                     display: block;
                     overflow: hidden;
-                    height: 32px;
+                    font-size: 18px;
+                    height: 36px;
                     svg {
                         height: 18px;
+                        width: var(--left-menu-width);
                     }
                     &.router-link-exact-active {
-                        color: var(--orange);
+                        color: var(--main-color);
                         cursor: auto;
                     }
                 }
@@ -88,47 +92,20 @@ export default {
             border: none;
             background-color: inherit;
             cursor: pointer;
-            padding: 4px;
+            margin-top: 4px;
+            padding: 0;
+            color: var(--text-color);
             svg {
                 height: 24px;
-                width: 24px;
+                width: var(--left-menu-width);
             }
         }
+
+        .theme-button {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+        }
     }
-    // .left-menu {
-    //     position: absolute;
-    //     top: 0;
-    //     left: 0;
-    //     bottom: 0;
-    //     right: 0;
-    //     z-index: 100;
-    //     background-color: #0000003b;
-    //     nav {
-    //         width: 300px;
-    //         height: 100%;
-    //         background-color: #eee;
-    //         button {
-    //             float: left;
-    //         }
-    //         ul {
-    //             height: 20px;
-    //             padding: 4px;
-    //             line-height: 2em;
-    //             a {
-    //                 display: flex;
-    //                 align-items: center;
-    //                 color: #111;
-    //                 text-decoration: none;
-    //                 svg {
-    //                     height: 18px;
-    //                 }
-    //                 &.router-link-exact-active {
-    //                     color: var(--orange);
-    //                     cursor: auto;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 }
 </style>

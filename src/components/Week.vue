@@ -123,10 +123,10 @@ export default defineComponent({
     text-align: center;
 }
 .day-number {
-    background-color: var(--orange);
+    background-color: var(--main-color);
     border-radius: 50%;
     width: 2em;
     line-height: 2em;
-    color: var(--background-color);
+    color: #fff;
 }
 </style>

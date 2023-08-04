@@ -1,11 +1,11 @@
 import { Commit } from "vuex";
 
 export const planTypes = {
-    orange: { color: "#f1e1d1", title: "Кино" },
-    yellow: { color: "#f5f1ad", title: "Спорт" },
-    red: { color: "#ffcece", title: "Рутина" },
-    green: { color: "#d8ffd7", title: "Самообучение" },
-    blue: { color: "#d7e4ff", title: "Развлечение" },
+    orange: { title: "Кино" },
+    yellow: { title: "Спорт" },
+    red: { title: "Рутина" },
+    green: { title: "Самообучение" },
+    blue: { title: "Развлечение" },
 } as const;
 
 export const colors = Object.keys(planTypes);

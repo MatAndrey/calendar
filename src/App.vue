@@ -9,7 +9,7 @@ export default {
     <Layout />
 </template>
 
-<style>
+<style lang="scss">
 html,
 body,
 div,
@@ -142,8 +142,49 @@ table {
 :root {
     --border-color: #999;
     --background-color: #fff;
-    --orange: rgb(223, 144, 70);
+    --main-color: rgb(223, 144, 70);
     --border-secondary: #bbb;
+    --text-color: #000;
+    --text-secondary: #555;
+    .orange {
+        background-color: #f1e1d1;
+    }
+    .yellow {
+        background-color: #f5f1ad;
+    }
+    .red {
+        background-color: #ffcece;
+    }
+    .green {
+        background-color: #d8ffd7;
+    }
+    .blue {
+        background-color: #d7e4ff;
+    }
+}
+
+:root[data-theme="dark"] {
+    --border-color: #868686;
+    --background-color: #353535;
+    --main-color: rgb(112, 112, 112);
+    --border-secondary: #474747;
+    --text-color: #fff;
+    --text-secondary: #bbbbbb;
+    .orange {
+        background-color: #614c37;
+    }
+    .yellow {
+        background-color: #837f47;
+    }
+    .red {
+        background-color: #583a3a;
+    }
+    .green {
+        background-color: #456c44;
+    }
+    .blue {
+        background-color: #445370;
+    }
 }
 
 @font-face {
@@ -153,5 +194,7 @@ table {
 
 body {
     font-family: Roboto;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 </style>

@@ -95,7 +95,7 @@ export default defineComponent({
             <footer>
                 <div class="colors">
                     <div class="color_container" v-for="(opt, c) in planTypes" :class="c === color && 'active'">
-                        <div class="color" :style="`background-color: ${opt.color};`" :data-color="c" @click="chengeColor" :title="opt.title"></div>
+                        <div :class="'color ' + c" :data-color="c" @click="chengeColor" :title="opt.title"></div>
                     </div>
                 </div>
                 <PrimaryBtn @click="saveChanges"><icon name="floppy-disk" />Сохранить</PrimaryBtn>
@@ -144,6 +144,8 @@ export default defineComponent({
         font-size: 16px;
         padding: 4px;
         border-radius: 8px;
+        color: var(--text-color);
+        background-color: var(--background-color);
     }
 
     .time-settings {
@@ -161,6 +163,8 @@ export default defineComponent({
                 margin-top: 2px;
                 border-radius: 4px;
                 width: 100%;
+                color: var(--text-color);
+                background-color: var(--background-color);
             }
         }
     }
@@ -187,7 +191,6 @@ export default defineComponent({
                 height: 16px;
                 border-radius: 50%;
                 border: 1px solid var(--border-color);
-                background-color: #fff;
                 cursor: pointer;
             }
             .color_container {

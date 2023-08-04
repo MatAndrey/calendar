@@ -10,7 +10,7 @@ export default {};
 
 <style scoped>
 button {
-    background-color: var(--orange);
+    background-color: var(--main-color);
     border: none;
     border-radius: 16px;
     color: #fff;

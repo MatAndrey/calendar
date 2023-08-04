@@ -93,7 +93,7 @@ export default defineComponent({
         h4 {
             font-size: 20px;
             margin-left: 20px;
-            color: #555;
+            color: var(--text-secondary);
         }
         .create-plan-btn {
             margin-left: auto;
