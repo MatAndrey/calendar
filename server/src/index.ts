@@ -10,13 +10,25 @@ if (!SECRET_KEY || !MONGO_URI) throw new Error("Environment variables are not fo
 
 export { MONGO_URI, SECRET_KEY };
 
-const client = mongoose.connect(MONGO_URI);
+const connectDB = async () => {
+    try {
+        const conn = await mongoose.connect(MONGO_URI);
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
+};
 
 const app = express();
 app.use(express.json());
 app.use("/auth", authRouter);
 app.use("/plans", plansRouter);
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log("App listening on port " + PORT));
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log("App listening on port " + PORT);
+    });
+});
