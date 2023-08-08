@@ -2,6 +2,7 @@
 import { Plan } from "@/store/plansModule";
 import { PropType } from "vue";
 import Checkbox from "./Checkbox.vue";
+import PlanDialog from "./PlanDialog.vue";
 
 export default {
     props: {
@@ -12,7 +13,8 @@ export default {
     },
     methods: {
         showModal(plan: Plan) {
-            this.$store.commit("openModal", plan);
+            this.$store.commit("setModalData", { plan });
+            this.$store.commit("openModal", PlanDialog);
         },
         completePlan(plan: Plan) {
             plan.completed = true;

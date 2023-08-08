@@ -6,10 +6,12 @@ export default {
     components: { PlansList },
     computed: {
         plans(): Plan[] {
-            this.$store.dispatch("getPlans");
-            const plans = this.$store.state.plan.plans;
+            const plans = this.$store.getters.sortedPlans;
             return plans;
         },
+    },
+    mounted() {
+        this.$store.dispatch("getPlans");
     },
 };
 </script>

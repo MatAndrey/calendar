@@ -6,6 +6,7 @@ import { type Plan } from "../store/plansModule";
 import Checkbox from "./Checkbox.vue";
 import { round } from "@/helpers/roud";
 import PlanItem from "./PlanItem.vue";
+import PlanDialog from "./PlanDialog.vue";
 
 const msInDay = 1000 * 60 * 60 * 24;
 
@@ -28,7 +29,8 @@ export default defineComponent({
     },
     methods: {
         showModal(plan: Plan) {
-            this.$store.commit("openModal", plan);
+            this.$store.commit("setModalData", { plan });
+            this.$store.commit("openModal", PlanDialog);
         },
         createStart(event: MouseEvent) {
             this.createStartEvent = event;

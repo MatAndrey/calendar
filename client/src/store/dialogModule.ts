@@ -1,21 +1,36 @@
+import { Component } from "vue";
 import { Plan } from "./plansModule";
 
-export interface dialogState {
-    planForDialog: undefined | Plan;
+interface ModalData {
+    plan: Plan | undefined;
 }
+
+export interface dialogState {
+    modal: Component | null;
+    modalData: ModalData;
+}
+
+const modalData: ModalData = {
+    plan: undefined,
+};
 
 export const dialogModule = {
     state: function getState(): dialogState {
         return {
-            planForDialog: undefined,
+            modal: null,
+            modalData,
         };
     },
     mutations: {
-        openModal(state: dialogState, plan: Plan) {
-            state.planForDialog = plan;
+        openModal(state: dialogState, plan: Component) {
+            state.modal = plan;
         },
         closeModal(state: dialogState) {
-            state.planForDialog = undefined;
+            state.modal = null;
+            state.modalData = modalData;
+        },
+        setModalData(state: dialogState, data: ModalData) {
+            state.modalData = data;
         },
     },
     namespace: false,

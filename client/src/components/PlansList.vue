@@ -53,7 +53,7 @@ export default {
 </script>
 
 <template>
-    <div class="plans-list">
+    <div class="plans-list" v-if="$props.plans.length">
         <div class="plans-for-day" v-for="day in days">
             <h4>{{ formatHeading(day[0].startAt) }}</h4>
             <PlanItem v-for="plan in day" :plan="plan" />

@@ -1,10 +1,12 @@
 <script lang="ts">
 import Calendar from "../pages/Calendar.vue";
-import PlanDialog from "../components/PlanDialog.vue";
 import ThemeButton from "./ThemeButton.vue";
+import Modal from "./Modal.vue";
+import LoginDialog from "./LoginDialog.vue";
+import UserSettingsDialog from "./UserSettingsDialog.vue";
 
 export default {
-    components: { Calendar, PlanDialog, ThemeButton },
+    components: { Calendar, ThemeButton, Modal },
     data() {
         return {
             isLeftMenuOpened: false,
@@ -14,12 +16,28 @@ export default {
         toggleLeftMenu() {
             this.isLeftMenuOpened = !this.isLeftMenuOpened;
         },
+        openLoginModal() {
+            this.isLeftMenuOpened = false;
+            if (this.isLogin) {
+                this.$store.commit("openModal", UserSettingsDialog);
+            } else {
+                this.$store.commit("openModal", LoginDialog);
+            }
+        },
+    },
+    computed: {
+        isLogin() {
+            return this.$store.state.user.name !== "" && this.$store.state.user.token !== "";
+        },
+        userName() {
+            return this.$store.state.user.name;
+        },
     },
 };
 </script>
 
 <template>
-    <PlanDialog :plan="$store.state.dialog.planForDialog" v-if="$store.state.dialog.planForDialog" />
+    <Modal />
     <div class="left-menu" :class="isLeftMenuOpened ? 'opened' : 'closed'">
         <nav @click.stop>
             <button class="left-menu-switch"><icon name="bars" @click="toggleLeftMenu" /></button>
@@ -29,6 +47,9 @@ export default {
                 </li>
                 <li>
                     <RouterLink to="/plans" @click="isLeftMenuOpened = false"><icon name="list" />Список планов</RouterLink>
+                </li>
+                <li>
+                    <button @click="openLoginModal" class="loginButton"><icon name="user" />{{ isLogin ? userName : "Войти" }}</button>
                 </li>
             </ul>
         </nav>
@@ -67,10 +88,7 @@ export default {
         nav {
             ul {
                 line-height: 2em;
-                a {
-                    align-items: center;
-                    color: var(--text-color);
-                    text-decoration: none;
+                li {
                     display: block;
                     overflow: hidden;
                     font-size: 18px;
@@ -79,9 +97,27 @@ export default {
                         height: 18px;
                         width: var(--left-menu-width);
                     }
-                    &.router-link-exact-active {
-                        color: var(--main-color);
-                        cursor: auto;
+                    a {
+                        color: var(--text-color);
+                        text-decoration: none;
+
+                        &.router-link-exact-active {
+                            color: var(--main-color);
+                            cursor: auto;
+                        }
+                    }
+                    .loginButton {
+                        background-color: transparent;
+                        border: none;
+                        padding: 0;
+                        display: block;
+                        font-size: 18px;
+                        display: flex;
+                        cursor: pointer;
+                        color: var(--text-color);
+                        &:disabled {
+                            cursor: auto;
+                        }
                     }
                 }
             }

@@ -1,4 +1,6 @@
-import { Commit } from "vuex";
+import { ActionContext, Commit } from "vuex";
+import store, { State } from ".";
+import { fetchPlans } from "@/helpers/api/fetchPlans";
 
 export const planTypes = {
     orange: { title: "Кино" },
@@ -53,9 +55,14 @@ export const plansModule = {
         },
     },
     actions: {
-        async getPlans({ commit }: { commit: Commit }) {
-            const plans = JSON.parse(localStorage.getItem("plans") || "[]");
-            commit("setPlans", plans);
+        async getPlans(context: ActionContext<plansState, State>) {
+            if (context.rootState.user.name && context.rootState.user.token) {
+                const plans = await fetchPlans(context.rootState.user.token);
+                context.commit("setPlans", plans);
+            } else {
+                const plans = JSON.parse(localStorage.getItem("plans") || "[]");
+                context.commit("setPlans", plans);
+            }
         },
     },
     getters: {

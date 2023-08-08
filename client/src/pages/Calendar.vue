@@ -4,6 +4,7 @@ import PrimaryBtn from "../components/PrimaryBtn.vue";
 import { defineComponent } from "vue";
 import { uid } from "uid";
 import { formatDate } from "../helpers/formatDate";
+import PlanDialog from "@/components/PlanDialog.vue";
 
 const weekStart = new Date();
 weekStart.setDate(weekStart.getDate() - (weekStart.getDay() || 7) + 1);
@@ -32,7 +33,7 @@ export default defineComponent({
             const date = new Date();
             date.setDate(date.getDate() + 1);
             date.setHours(0, 0, 0, 0);
-            this.$store.commit("openModal", {
+            const plan = {
                 title: "",
                 description: "",
                 startAt: +date,
@@ -40,7 +41,9 @@ export default defineComponent({
                 completed: false,
                 color: "orange",
                 id: uid(),
-            });
+            };
+            this.$store.commit("setModalData", { plan });
+            this.$store.commit("openModal", PlanDialog);
         },
     },
     computed: {
@@ -54,8 +57,8 @@ export default defineComponent({
 <template>
     <div class="calendar">
         <div class="menu">
-            <button @click.self="previous" class="arrow-button"><icon name="angle-left" /></button
-            ><button @click.self="next" class="arrow-button"><icon name="angle-right" /></button>
+            <button @click="previous" class="arrow-button"><icon name="angle-left" /></button
+            ><button @click="next" class="arrow-button"><icon name="angle-right" /></button>
             <h4>{{ month }}</h4>
             <PrimaryBtn class="create-plan-btn" @click.self="createPlan"><icon name="plus" />Новый план</PrimaryBtn>
         </div>
