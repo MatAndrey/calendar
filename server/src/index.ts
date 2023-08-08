@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 import authRouter from "./routes/auth.router";
 import plansRouter from "./routes/plans.router";
 require("dotenv").config();
@@ -22,6 +23,7 @@ const connectDB = async () => {
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 app.use("/auth", authRouter);
 app.use("/plans", plansRouter);
 

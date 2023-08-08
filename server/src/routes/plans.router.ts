@@ -24,10 +24,7 @@ router.post("/", async (req: Request, res: Response) => {
     }
     const name = req.user.name;
     const user = await User.findOne({ name });
-    const plans = req.body.plans;
-    if (!plans) {
-        return res.status(500).json({ message: "Планы не найдены" });
-    }
+    const plans = req.body;
     if (user) {
         user.plans = plans;
         const newUser = await user.save();
