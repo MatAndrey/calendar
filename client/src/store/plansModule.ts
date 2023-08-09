@@ -1,5 +1,5 @@
-import { ActionContext, Commit } from "vuex";
-import store, { State } from ".";
+import { ActionContext } from "vuex";
+import { State } from ".";
 import { fetchPlans } from "@/helpers/api/fetchPlans";
 
 export const planTypes = {

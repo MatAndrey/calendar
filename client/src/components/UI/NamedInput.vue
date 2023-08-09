@@ -1,10 +1,22 @@
 <script lang="ts">
+import { PropType } from "vue";
+
 export default {
     props: {
         initValue: [String, Number],
-        name: [String],
-        title: [String],
-        type: [String],
+        name: {
+            type: String,
+            required: true,
+        },
+        title: {
+            type: String,
+            required: true,
+        },
+        type: {
+            type: String as PropType<"password" | "text">,
+            required: true,
+        },
+        errorMessage: [String],
     },
     data() {
         return {
@@ -12,6 +24,7 @@ export default {
             value: this.$props.initValue || "",
             inputType: this.$props.type,
             isPassVisible: false,
+            showMessage: false,
         };
     },
     methods: {
@@ -30,6 +43,10 @@ export default {
                 this.isPassVisible = true;
             }
         },
+        blur() {
+            this.isFocused = false;
+            this.showMessage = true;
+        },
     },
 };
 </script>
@@ -38,11 +55,12 @@ export default {
     <div class="input">
         <div class="input-wrapper">
             <label :for="name" :class="{ focused: isFocused || value !== '' }">{{ title }}</label
-            ><input :type="inputType" :id="name" @focus="isFocused = true" @blur="isFocused = false" @input="updateValue" />
+            ><input :type="inputType" :id="name" @focus="isFocused = true" @blur="blur" @input="updateValue" :value="value" />
             <button class="showPassword" @click="showPassword" v-if="$props.type === 'password'" tabindex="-1">
                 <icon :name="isPassVisible ? 'eye-slash' : 'eye'" />
             </button>
         </div>
+        <div class="error-message" v-if="showMessage">{{ errorMessage }}</div>
     </div>
 </template>
 
@@ -84,10 +102,17 @@ export default {
         top: 8px;
         padding: 0;
         cursor: pointer;
+        color: var(--text-color);
         svg {
             height: 20px;
             width: 20px;
         }
     }
+}
+
+.error-message {
+    margin-top: 4px;
+    font-size: 14px;
+    color: rgba(255, 0, 0, 0.5);
 }
 </style>

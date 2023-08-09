@@ -1,8 +1,9 @@
 <script lang="ts">
-import { Plan } from "@/store/plansModule";
 import { PropType } from "vue";
-import Checkbox from "./Checkbox.vue";
-import PlanDialog from "./PlanDialog.vue";
+import { Plan } from "@/store/plansModule";
+import Checkbox from "@/components/UI/Checkbox.vue";
+import PlanDialog from "@/components/Modal/PlanDialog.vue";
+import { savePlan } from "@/helpers/api/savePlans";
 
 export default {
     props: {
@@ -18,7 +19,7 @@ export default {
         },
         completePlan(plan: Plan) {
             plan.completed = true;
-            this.$store.commit("editPlan", plan);
+            savePlan(plan);
         },
     },
     components: {

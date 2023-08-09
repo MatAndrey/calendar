@@ -1,12 +1,11 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, type PropType } from "vue";
 import { uid } from "uid";
-import type { PropType } from "vue";
-import { type Plan } from "../store/plansModule";
-import Checkbox from "./Checkbox.vue";
 import { round } from "@/helpers/roud";
-import PlanItem from "./PlanItem.vue";
-import PlanDialog from "./PlanDialog.vue";
+import { type Plan } from "@/store/plansModule";
+import Checkbox from "@/components/UI/Checkbox.vue";
+import PlanItem from "@/components/PlanItem.vue";
+import PlanDialog from "@/components/Modal/PlanDialog.vue";
 
 const msInDay = 1000 * 60 * 60 * 24;
 

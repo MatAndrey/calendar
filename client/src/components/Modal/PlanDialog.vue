@@ -1,10 +1,11 @@
 <script lang="ts">
-import { Plan, colors, planTypes } from "../store/plansModule";
-import { PropType, defineComponent, ref, shallowRef } from "vue";
-import Checkbox from "./Checkbox.vue";
-import PrimaryBtn from "./PrimaryBtn.vue";
-import VFocus from "../directives/VFocus";
-import { formatDate } from "../helpers/formatDate";
+import { Plan, planTypes } from "@/store/plansModule";
+import { defineComponent } from "vue";
+import Checkbox from "@/components/UI/Checkbox.vue";
+import PrimaryBtn from "@/components/UI/PrimaryBtn.vue";
+import VFocus from "@/directives/VFocus";
+import { formatDate } from "@/helpers/formatDate";
+import { savePlan } from "@/helpers/api/savePlans";
 
 export default defineComponent({
     methods: {
@@ -15,15 +16,16 @@ export default defineComponent({
         closeModal() {
             this.$store.commit("closeModal");
         },
-        saveChanges() {
-            this.$store.commit("editPlan", {
+        async saveChanges() {
+            const newPlan = {
                 description: this.description,
                 completed: this.completed,
                 startAt: this.startAt,
                 duration: this.duration,
                 color: this.color,
                 id: this.id,
-            });
+            };
+            await savePlan(newPlan);
             this.closeModal();
         },
         changeStart(event: Event) {

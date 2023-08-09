@@ -2,12 +2,13 @@
 import { defineComponent } from "vue";
 import PlansForDay from "./PlansForDay.vue";
 import { Plan } from "@/store/plansModule";
+import Loader from "./UI/Loader.vue";
 
 const dayNames = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"];
 const msInDay = 1000 * 60 * 60 * 24;
 
 export default defineComponent({
-    components: { PlansForDay },
+    components: { PlansForDay, Loader },
     props: {
         weekStart: {
             type: Number,
@@ -36,6 +37,9 @@ export default defineComponent({
             const plans = this.$store.getters.sortedPlans;
             return plans;
         },
+        isLoading() {
+            return this.$store.state.plan.isLoading;
+        },
     },
     mounted() {
         this.$store.dispatch("getPlans");
@@ -45,7 +49,7 @@ export default defineComponent({
 
 <template>
     <div class="week">
-        <div class="days_container">
+        <div class="days_container" v-if="!isLoading">
             <div class="time-marks">
                 <div class="time-mark" v-for="hour in 25">{{ hour - 1 >= 10 ? hour - 1 : "0" + (hour - 1) }}:00</div>
             </div>
@@ -60,6 +64,7 @@ export default defineComponent({
                 <PlansForDay :date="(dayNumber - 1) * (1000 * 60 * 60 * 24) + $props.weekStart" :plans="plansForDay(dayNumber)" />
             </div>
         </div>
+        <Loader v-else />
     </div>
 </template>
 

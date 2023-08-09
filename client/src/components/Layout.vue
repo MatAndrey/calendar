@@ -1,9 +1,9 @@
 <script lang="ts">
-import Calendar from "../pages/Calendar.vue";
-import ThemeButton from "./ThemeButton.vue";
-import Modal from "./Modal.vue";
-import LoginDialog from "./LoginDialog.vue";
-import UserSettingsDialog from "./UserSettingsDialog.vue";
+import Calendar from "@/pages/Calendar.vue";
+import ThemeButton from "@/components/UI/ThemeButton.vue";
+import Modal from "@/components/Modal/Modal.vue";
+import LoginDialog from "@/components/Modal/LoginDialog.vue";
+import UserSettingsDialog from "@/components/Modal/UserSettingsDialog.vue";
 
 export default {
     components: { Calendar, ThemeButton, Modal },

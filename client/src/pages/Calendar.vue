@@ -1,10 +1,10 @@
 <script lang="ts">
-import Week from "../components/Week.vue";
-import PrimaryBtn from "../components/PrimaryBtn.vue";
 import { defineComponent } from "vue";
 import { uid } from "uid";
-import { formatDate } from "../helpers/formatDate";
-import PlanDialog from "@/components/PlanDialog.vue";
+import Week from "@/components/Week.vue";
+import PrimaryBtn from "@/components/UI/PrimaryBtn.vue";
+import { formatDate } from "@/helpers/formatDate";
+import PlanDialog from "@/components/Modal/PlanDialog.vue";
 
 const weekStart = new Date();
 weekStart.setDate(weekStart.getDate() - (weekStart.getDay() || 7) + 1);

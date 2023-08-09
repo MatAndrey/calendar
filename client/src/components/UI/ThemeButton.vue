@@ -1,5 +1,4 @@
 <script lang="ts">
-type Theme = "light" | "dark";
 export default {
     computed: {
         userTheme() {

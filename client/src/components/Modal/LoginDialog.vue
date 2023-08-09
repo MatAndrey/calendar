@@ -1,13 +1,13 @@
 <script lang="ts">
-import { login, register } from "../helpers/api/login";
-import NamedInput from "./NamedInput.vue";
-import PrimaryBtn from "./PrimaryBtn.vue";
+import { validate } from "@/helpers/validation";
+import { login, register } from "@/helpers/api/login";
+import NamedInput from "@/components/UI/NamedInput.vue";
+import PrimaryBtn from "@/components/UI/PrimaryBtn.vue";
 
 export default {
     data() {
         return {
             isLogin: true,
-            isValid: true,
             name: "",
             password: "",
             secondPassword: "",
@@ -29,6 +29,20 @@ export default {
             }
         },
     },
+    computed: {
+        nameError() {
+            if (!this.isLogin) return validate("name", this.name);
+        },
+        passwordError() {
+            if (!this.isLogin) return validate("password", this.password);
+        },
+        secondPasswordError() {
+            if (!this.isLogin) return this.password === this.secondPassword ? undefined : "Пароли должны совпадать";
+        },
+        isValid(): boolean {
+            return !this.nameError && !this.passwordError && !this.secondPasswordError;
+        },
+    },
     components: { PrimaryBtn, NamedInput },
 };
 </script>
@@ -36,9 +50,16 @@ export default {
 <template>
     <div class="login-dialog">
         <h3>{{ isLogin ? "Вход" : "Регистрация" }}</h3>
-        <NamedInput name="name" title="Имя" v-model="name" />
-        <NamedInput name="password" title="Пароль" type="password" v-model="password" />
-        <NamedInput name="secondPas" title="Поторите пароль" type="password" v-model="secondPassword" v-if="!isLogin" />
+        <NamedInput name="name" title="Имя" type="text" v-model="name" :errorMessage="nameError" />
+        <NamedInput name="password" title="Пароль" type="password" v-model="password" :errorMessage="passwordError" />
+        <NamedInput
+            name="secondPas"
+            title="Поторите пароль"
+            type="password"
+            v-model="secondPassword"
+            v-if="!isLogin"
+            :errorMessage="secondPasswordError"
+        />
         <button class="change-type" @click="changeType">{{ isLogin ? "Регистрация" : "Вход" }}</button>
         <PrimaryBtn @click="sendForm" :disabled="!isValid">{{ isLogin ? "Войти" : "Зарегистрироваться" }}</PrimaryBtn>
     </div>
@@ -64,5 +85,9 @@ button.change-type {
 }
 button.primary-button {
     float: right;
+    &:disabled {
+        cursor: auto;
+        background-color: var(--border-color);
+    }
 }
 </style>
