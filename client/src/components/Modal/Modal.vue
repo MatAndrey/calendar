@@ -54,7 +54,7 @@ export default {
         background: var(--background-color);
         padding: 16px;
         border-radius: 16px;
-        margin-top: 32px;
+        margin-top: 40px;
     }
 }
 </style>

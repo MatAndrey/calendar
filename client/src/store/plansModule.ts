@@ -19,6 +19,10 @@ export interface Plan {
     completed: boolean;
     color: keyof typeof planTypes;
     id: string;
+    repeat?: {
+        times: number;
+        period: number;
+    };
 }
 
 export interface plansState {
@@ -63,6 +67,9 @@ export const plansModule = {
                 const plans = JSON.parse(localStorage.getItem("plans") || "[]");
                 context.commit("setPlans", plans);
             }
+        },
+        saveMultiplePlans(context: ActionContext<plansState, State>, plans: Plan[]) {
+            plans.forEach((plan) => context.commit("editPlan", plan));
         },
     },
     getters: {

@@ -25,6 +25,7 @@ export default {
     border-radius: 100%;
     cursor: pointer;
     padding: 0;
+    box-sizing: border-box;
     &.active {
         background-color: var(--main-color);
     }

@@ -21,8 +21,20 @@ export default {
 </script>
 
 <template>
-    <PlansList :plans="plans" v-if="!isLoading" />
-    <Loader v-else />
+    <div class="plans-page">
+        <h1>Планы</h1>
+        <PlansList :plans="plans" v-if="!isLoading" />
+        <Loader v-else />
+    </div>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+.plans-page {
+    max-width: 600px;
+    margin: auto;
+    h1 {
+        font-size: 28px;
+        margin: 8px 0;
+    }
+}
+</style>

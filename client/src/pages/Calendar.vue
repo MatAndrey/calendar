@@ -42,7 +42,7 @@ export default defineComponent({
                 color: "orange",
                 id: uid(),
             };
-            this.$store.commit("setModalData", { plan });
+            this.$store.commit("setModalData", { plan, isPlanNew: true });
             this.$store.commit("openModal", PlanDialog);
         },
     },

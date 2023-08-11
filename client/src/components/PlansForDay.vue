@@ -6,6 +6,7 @@ import { type Plan } from "@/store/plansModule";
 import Checkbox from "@/components/UI/Checkbox.vue";
 import PlanItem from "@/components/PlanItem.vue";
 import PlanDialog from "@/components/Modal/PlanDialog.vue";
+import { savePlan } from "@/helpers/api/savePlans";
 
 const msInDay = 1000 * 60 * 60 * 24;
 
@@ -27,8 +28,8 @@ export default defineComponent({
         };
     },
     methods: {
-        showModal(plan: Plan) {
-            this.$store.commit("setModalData", { plan });
+        showModal(plan: Plan, isNew = false) {
+            this.$store.commit("setModalData", { plan, isPlanNew: isNew });
             this.$store.commit("openModal", PlanDialog);
         },
         createStart(event: MouseEvent) {
@@ -53,7 +54,7 @@ export default defineComponent({
                     duration,
                     color: "red",
                 };
-                this.showModal(newPlan);
+                this.showModal(newPlan, true);
                 this.createStartEvent = null;
             }
         },
@@ -76,6 +77,7 @@ export default defineComponent({
                 plan.startAt += daysShift * 24 * 60 * 60 * 1000;
                 plan.startAt = round(plan.startAt, 1800000);
                 this.dragStartEvent = null;
+                savePlan(plan);
             }
         },
         planStyles(plan: Plan) {
@@ -150,3 +152,4 @@ export default defineComponent({
     }
 }
 </style>
+@/helpers/api/savePlan
