@@ -82,7 +82,7 @@ export default {
     <h5 v-else>Список пуст</h5>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .plans-list {
     .plans-group {
         h4 {

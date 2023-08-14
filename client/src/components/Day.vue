@@ -9,6 +9,7 @@ import PlanDialog from "@/components/Modal/PlanDialog.vue";
 import { savePlan } from "@/helpers/api/savePlans";
 
 const msInDay = 1000 * 60 * 60 * 24;
+const dayNames = ["вс", "пн", "вт", "ср", "чт", "пт", "сб"];
 
 export default defineComponent({
     props: {
@@ -99,10 +100,32 @@ export default defineComponent({
             };
         },
         isItToday() {
-            return Date.now() - this.$props.date <= msInDay && Date.now() - this.$props.date > 0;
+            return Date.now() - this.date <= msInDay && Date.now() - this.date > 0;
         },
         currentTimeStyle() {
-            return { top: ((Date.now() - this.$props.date) / msInDay) * 100 + "%" };
+            return { top: ((Date.now() - this.date) / msInDay) * 100 + "%" };
+        },
+        createPlanAfterLast() {
+            const lastPlan = this.plans.sort((a, b) => a.startAt - b.startAt).at(-1);
+            const newPlan: Plan = {
+                description: "",
+                startAt: lastPlan ? lastPlan.startAt + lastPlan.duration : this.date,
+                completed: false,
+                id: uid(),
+                duration: 1000 * 60 * 60,
+                color: "red",
+            };
+            this.showModal(newPlan, true);
+            this.createStartEvent = null;
+        },
+    },
+    computed: {
+        dayName() {
+            return dayNames[new Date(this.date).getDay()];
+        },
+        dateNumber() {
+            const date = new Date(this.date);
+            return date.getDate();
         },
     },
     components: { Checkbox, PlanItem },
@@ -110,46 +133,97 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="plans-container" @pointerdown.self="createStart" @pointerup.self="createEnd">
-        <PlanItem
-            :plan="plan"
-            v-for="plan in $props.plans"
-            @dragstart="dragStart"
-            @dragend="(e) => dragEnd(e, plan)"
-            draggable="true"
-            :key="plan.id"
-            :style="planStyles(plan)"
-        />
-        <div v-if="isItToday()" class="current-time" :style="currentTimeStyle()"></div>
+    <div class="day">
+        <div class="hour-lines">
+            <div class="hour-line" v-for="_ in 25"></div>
+        </div>
+        <div class="date-info" @click="createPlanAfterLast">
+            <div class="day-number">{{ dateNumber }}</div>
+            <div class="day-name">{{ dayName }}</div>
+        </div>
+        <div class="plans-container" @pointerdown.self="createStart" @pointerup.self="createEnd">
+            <PlanItem
+                :plan="plan"
+                v-for="plan in $props.plans"
+                @dragstart="dragStart"
+                @dragend="(e) => dragEnd(e, plan)"
+                draggable="true"
+                :key="plan.id"
+                :style="planStyles(plan)"
+            />
+            <div v-if="isItToday()" class="current-time" :style="currentTimeStyle()"></div>
+        </div>
     </div>
 </template>
 
-<style scoped lang="scss">
-.plans-container {
-    height: calc(var(--hour-height) * 24);
-    border-right: 1px solid var(--border-secondary);
-    width: 100%;
+<style lang="scss">
+.day {
+    width: calc(100% / 7);
+    height: 100%;
+    min-width: 220px;
     position: relative;
-}
-.day:last-child .plans-container {
-    border: none;
-}
-.plan {
-    min-height: 20px;
-    position: absolute;
-}
-
-.current-time {
-    border: 1px red solid;
-    width: 100%;
-    position: absolute;
-    &::before {
-        content: "сейчас";
+    .hour-lines {
         position: absolute;
-        bottom: 0;
-        color: var(--border-color);
         z-index: -10;
+        top: 72px;
+        left: 0;
+        right: 0;
+        .hour-line {
+            border-top: 1px solid var(--border-secondary);
+            height: calc(var(--hour-height));
+            width: 100%;
+        }
+    }
+    .date-info {
+        padding: 6px 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--background-color);
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        cursor: pointer;
+        .day-number,
+        .day-name {
+            font-size: 20px;
+            width: 2em;
+            text-align: center;
+        }
+        .day-number {
+            background-color: var(--main-color);
+            border-radius: 50%;
+            width: 2em;
+            line-height: 2em;
+            color: #fff;
+        }
+    }
+
+    &:last-child .plans-container {
+        border: none;
+    }
+    .plans-container {
+        height: calc(var(--hour-height) * 24);
+        border-right: 1px solid var(--border-secondary);
+        width: 100%;
+        position: relative;
+        .plan {
+            min-height: 20px;
+            position: absolute;
+        }
+        .current-time {
+            border: 1px red solid;
+            width: 100%;
+            position: absolute;
+            &::before {
+                content: "сейчас";
+                position: absolute;
+                bottom: 0;
+                color: var(--border-color);
+                z-index: -10;
+            }
+        }
     }
 }
 </style>
-@/helpers/api/savePlan

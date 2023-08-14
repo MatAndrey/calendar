@@ -112,86 +112,87 @@ export default defineComponent({
     </div>
 </template>
 
-<style scoped lang="scss">
-textarea {
-    width: 100%;
-    max-height: 400px;
-    resize: vertical;
-    height: 15em;
-    font-family: Roboto;
-    font-size: 16px;
-    padding: 4px;
-    border-radius: 8px;
-    color: var(--text-color);
-    background-color: var(--background-color);
-}
-
-.time-settings {
-    display: flex;
-    flex-wrap: wrap;
-    label {
-        width: 50%;
+<style lang="scss">
+.plan-dialog {
+    textarea {
+        width: 100%;
+        max-height: 400px;
+        resize: vertical;
+        height: 15em;
+        font-family: Roboto;
+        font-size: 16px;
         padding: 4px;
+        border-radius: 8px;
+        color: var(--text-color);
+        background-color: var(--background-color);
     }
-}
-input {
-    height: 20px;
-    padding: 2px;
-    font-family: inherit;
-    font-size: 16px;
-    border: 1px solid var(--border-color);
-    margin-top: 2px;
-    border-radius: 4px;
-    width: 100%;
-    color: var(--text-color);
-    background-color: var(--background-color);
-}
-.is-repeat {
-    display: flex;
-    align-items: center;
-    button {
-        margin-left: 8px;
-    }
-}
-.repeat-settings {
-    label {
-        display: block;
-        margin-top: 4px;
-        input {
-            width: 50px;
+
+    .time-settings {
+        display: flex;
+        flex-wrap: wrap;
+        label {
+            width: 50%;
+            padding: 4px;
         }
     }
-}
-button.save-btn {
-    float: right;
-    margin-top: 2px;
-    display: flex;
-    svg {
-        width: 18px;
-        height: 18px;
-        margin-right: 4px;
-    }
-}
-.colors {
-    display: flex;
-    height: 20px;
-    align-items: center;
-    float: left;
-    .color {
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
+    input {
+        height: 20px;
+        padding: 2px;
+        font-family: inherit;
+        font-size: 16px;
         border: 1px solid var(--border-color);
-        cursor: pointer;
+        margin-top: 2px;
+        border-radius: 4px;
+        width: 100%;
+        color: var(--text-color);
+        background-color: var(--background-color);
     }
-    .color_container {
-        margin-right: 4px;
-        &.active {
-            border: 1px solid var(--border-color);
+    .is-repeat {
+        display: flex;
+        align-items: center;
+        button {
+            margin-left: 8px;
+        }
+    }
+    .repeat-settings {
+        label {
+            display: block;
+            margin-top: 4px;
+            input {
+                width: 50px;
+            }
+        }
+    }
+    button.save-btn {
+        float: right;
+        margin-top: 2px;
+        display: flex;
+        svg {
+            width: 18px;
+            height: 18px;
+            margin-right: 4px;
+        }
+    }
+    .colors {
+        display: flex;
+        height: 20px;
+        align-items: center;
+        float: left;
+        .color {
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
-            padding: 1px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+        .color_container {
+            margin-right: 4px;
+            &.active {
+                border: 1px solid var(--border-color);
+                border-radius: 50%;
+                padding: 1px;
+            }
         }
     }
 }
 </style>
-@/helpers/api/savePlan

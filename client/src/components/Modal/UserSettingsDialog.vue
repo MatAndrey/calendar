@@ -58,15 +58,17 @@ export default {
     </div>
 </template>
 
-<style scoped>
-h3 {
-    font-size: 22px;
-}
-.input {
-    margin: 16px 0;
-}
+<style lang="scss">
+.user-settings-dialog {
+    h3 {
+        font-size: 22px;
+    }
+    .input {
+        margin: 16px 0;
+    }
 
-.save {
-    float: right;
+    .save {
+        float: right;
+    }
 }
 </style>

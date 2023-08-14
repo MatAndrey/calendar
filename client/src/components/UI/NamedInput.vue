@@ -64,55 +64,57 @@ export default {
     </div>
 </template>
 
-<style scoped lang="scss">
-.input-wrapper {
-    position: relative;
-    label {
-        position: absolute;
-        top: 12px;
-        left: 8px;
-        background-color: var(--background-color);
-        color: var(--text-secondary);
-        &.focused {
-            top: -4px;
-            font-size: 14px;
+<style lang="scss">
+.input {
+    .input-wrapper {
+        position: relative;
+        label {
+            position: absolute;
+            top: 12px;
+            left: 8px;
+            background-color: var(--background-color);
+            color: var(--text-secondary);
+            &.focused {
+                top: -4px;
+                font-size: 14px;
+                color: var(--text-color);
+            }
+            transition: all 0.2s;
+        }
+        input {
+            padding: 8px;
+            font-family: inherit;
+            font-size: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            width: 100%;
+            background-color: var(--background-color);
             color: var(--text-color);
+            &:focus {
+                outline: none;
+                border: 1px solid var(--text-secondary);
+            }
         }
-        transition: all 0.2s;
-    }
-    input {
-        padding: 8px;
-        font-family: inherit;
-        font-size: 16px;
-        border: 1px solid var(--border-color);
-        border-radius: 4px;
-        width: 100%;
-        background-color: var(--background-color);
-        color: var(--text-color);
-        &:focus {
-            outline: none;
-            border: 1px solid var(--text-secondary);
-        }
-    }
-    .showPassword {
-        border: none;
-        background-color: transparent;
-        position: absolute;
-        right: 8px;
-        top: 8px;
-        padding: 0;
-        cursor: pointer;
-        color: var(--text-color);
-        svg {
-            height: 20px;
-            width: 20px;
+        .showPassword {
+            border: none;
+            background-color: transparent;
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            padding: 0;
+            cursor: pointer;
+            color: var(--text-color);
+            svg {
+                height: 20px;
+                width: 20px;
+            }
         }
     }
-}
 
-.error-message {
-    margin-top: 4px;
-    font-size: 14px;
-    color: rgba(255, 0, 0, 0.5);
+    .error-message {
+        margin-top: 4px;
+        font-size: 14px;
+        color: rgba(255, 0, 0, 0.5);
+    }
 }
 </style>

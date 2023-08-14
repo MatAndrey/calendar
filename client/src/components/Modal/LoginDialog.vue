@@ -65,29 +65,31 @@ export default {
     </div>
 </template>
 
-<style scoped lang="scss">
-h3 {
-    font-size: 22px;
-}
+<style lang="scss">
+.login-dialog {
+    h3 {
+        font-size: 22px;
+    }
 
-.input {
-    margin: 16px 0;
-}
+    .input {
+        margin: 16px 0;
+    }
 
-button.change-type {
-    border: none;
-    background-color: transparent;
-    font-size: 16px;
-    font-family: inherit;
-    color: var(--main-color);
-    text-decoration: underline;
-    cursor: pointer;
-}
-button.primary-button {
-    float: right;
-    &:disabled {
-        cursor: auto;
-        background-color: var(--border-color);
+    button.change-type {
+        border: none;
+        background-color: transparent;
+        font-size: 16px;
+        font-family: inherit;
+        color: var(--main-color);
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    button.primary-button {
+        float: right;
+        &:disabled {
+            cursor: auto;
+            background-color: var(--border-color);
+        }
     }
 }
 </style>

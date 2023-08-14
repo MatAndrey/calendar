@@ -8,7 +8,7 @@ export default {};
     </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .loader {
     width: 100%;
     height: 100%;

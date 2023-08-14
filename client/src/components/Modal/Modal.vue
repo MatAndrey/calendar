@@ -22,7 +22,7 @@ export default {
     </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .modal_container {
     position: fixed;
     top: 0;

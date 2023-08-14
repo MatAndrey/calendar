@@ -8,7 +8,7 @@ export default {};
     </button>
 </template>
 
-<style scoped>
+<style>
 button.primary-button {
     background-color: var(--main-color);
     border: none;

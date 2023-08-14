@@ -66,7 +66,7 @@ export default defineComponent({
     </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .calendar {
     display: flex;
     flex-direction: column;

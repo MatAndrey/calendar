@@ -37,7 +37,7 @@ export default {
     </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .plan {
     border-radius: 8px;
     padding: 3px 8px;
@@ -49,6 +49,10 @@ export default {
         color: var(--text-secondary);
         height: 100%;
         overflow: hidden;
+        p {
+            white-space: pre-line;
+            margin-left: 18px;
+        }
         button {
             margin-right: 4px;
             float: left;
@@ -56,4 +60,3 @@ export default {
     }
 }
 </style>
-@/helpers/api/savePlan

@@ -28,7 +28,7 @@ export default {
     </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .plans-page {
     max-width: 600px;
     margin: auto;

@@ -19,7 +19,7 @@ export default {
     </button>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .checkbox {
     border: 1px solid var(--border-color);
     border-radius: 100%;

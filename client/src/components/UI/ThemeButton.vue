@@ -24,7 +24,7 @@ export default {
     </div>
 </template>
 
-<style scoped>
+<style>
 .switch-checkbox {
     display: none;
 }
