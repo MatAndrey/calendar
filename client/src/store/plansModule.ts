@@ -2,15 +2,21 @@ import { ActionContext } from "vuex";
 import { State } from ".";
 import { fetchPlans } from "@/helpers/api/fetchPlans";
 
-export const planTypes = {
-    orange: { title: "Кино" },
-    yellow: { title: "Спорт" },
-    red: { title: "Рутина" },
-    green: { title: "Самообучение" },
-    blue: { title: "Развлечение" },
-} as const;
+export enum Colors {
+    orange = "orange",
+    yellow = "yellow",
+    red = "red",
+    green = "green",
+    blue = "blue",
+}
 
-export const colors = Object.keys(planTypes);
+export const planTypes = {
+    [Colors.orange]: { title: "Кино" },
+    [Colors.yellow]: { title: "Спорт" },
+    [Colors.red]: { title: "Рутина" },
+    [Colors.green]: { title: "Самообучение" },
+    [Colors.blue]: { title: "Развлечение" },
+} as const;
 
 export interface Plan {
     startAt: number;
@@ -19,10 +25,6 @@ export interface Plan {
     completed: boolean;
     color: keyof typeof planTypes;
     id: string;
-    repeat?: {
-        times: number;
-        period: number;
-    };
 }
 
 export interface plansState {

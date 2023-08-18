@@ -7,6 +7,7 @@ import VFocus from "@/directives/VFocus";
 import { formatDate } from "@/helpers/formatDate";
 import { savePlan } from "@/helpers/api/savePlans";
 import { uid } from "uid";
+import ColorSelect from "../UI/ColorSelect.vue";
 
 export default defineComponent({
     methods: {
@@ -55,10 +56,6 @@ export default defineComponent({
                 this.plan.duration = +date - this.plan.startAt;
             }
         },
-        chengeColor(event: Event) {
-            const target = event.target as HTMLInputElement;
-            this.plan.color = target.dataset.color as keyof typeof planTypes;
-        },
         changeDate(event: Event) {
             const target = event.target as HTMLInputElement;
             const [year, month, date] = target.value.split("-");
@@ -68,18 +65,17 @@ export default defineComponent({
         },
     },
     data() {
-        const plan = this.$store.state.dialog.modalData.plan as Plan;
+        const plan = JSON.parse(JSON.stringify(this.$store.state.dialog.modalData.plan)) as Plan;
         return {
             plan,
-            isRepeat: !!plan.repeat || false,
+            isRepeat: false,
             repeatSettings: {
-                period: plan.repeat?.period || 1,
-                times: plan.repeat?.times || 2,
+                period: 1,
+                times: 2,
             },
-            planTypes,
         };
     },
-    components: { Checkbox, PrimaryBtn },
+    components: { Checkbox, PrimaryBtn, ColorSelect },
     directives: { focus: VFocus },
 });
 </script>
@@ -103,11 +99,7 @@ export default defineComponent({
             <label>Дата <input type="date" :value="formatDate(plan.startAt, 'YYYY-MM-DD')" @focusout="changeDate" /></label>
         </div>
 
-        <div class="colors">
-            <div class="color_container" v-for="(opt, c) in planTypes" :class="c === plan.color && 'active'" key="c">
-                <div :class="'color ' + c" :data-color="c" @click="chengeColor" :title="opt.title"></div>
-            </div>
-        </div>
+        <ColorSelect v-model="plan.color" />
         <PrimaryBtn @click="saveChanges" class="save-btn"><icon name="floppy-disk" />Сохранить</PrimaryBtn>
     </div>
 </template>
@@ -163,6 +155,9 @@ export default defineComponent({
             }
         }
     }
+    .color-select {
+        float: left;
+    }
     button.save-btn {
         float: right;
         margin-top: 2px;
@@ -171,27 +166,6 @@ export default defineComponent({
             width: 18px;
             height: 18px;
             margin-right: 4px;
-        }
-    }
-    .colors {
-        display: flex;
-        height: 20px;
-        align-items: center;
-        float: left;
-        .color {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-        }
-        .color_container {
-            margin-right: 4px;
-            &.active {
-                border: 1px solid var(--border-color);
-                border-radius: 50%;
-                padding: 1px;
-            }
         }
     }
 }
