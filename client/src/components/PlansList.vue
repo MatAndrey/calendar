@@ -1,9 +1,9 @@
 <script lang="ts">
-import { Colors, Plan, planTypes } from "@/store/plansModule";
+import { Plan, planTypes } from "@/store/plansModule";
 import { PropType } from "vue";
 import { formatDate } from "../helpers/formatDate";
 import PlanItem from "./PlanItem.vue";
-import ColorSelect from "./UI/ColorSelect.vue";
+import TypeSelect from "./UI/TypeSelect.vue";
 
 interface PlansGroup {
     title: string;
@@ -17,16 +17,22 @@ export default {
             required: true,
         },
     },
+    data() {
+        return {
+            selectedTypes: planTypes.map((el) => el),
+            groupBy: "startAt" as "startAt" | "type",
+        };
+    },
     computed: {
         filtredPlans(): Plan[] {
-            return this.$props.plans.filter((plan) => this.selectedColors.includes(plan.color));
+            return this.$props.plans.filter((plan) => this.selectedTypes.find((selected) => plan.type.name === selected.name));
         },
         plansGroups(): PlansGroup[] {
             const plans = this.filtredPlans;
             if (this.groupBy === "startAt") {
                 return this.groupByTime(plans);
-            } else if (this.groupBy === "color") {
-                return this.groupByColor(plans);
+            } else if (this.groupBy === "type") {
+                return this.groupByType(plans);
             }
             return [];
         },
@@ -77,34 +83,29 @@ export default {
             }
             return groups;
         },
-        groupByColor(plans: Plan[]): PlansGroup[] {
-            plans = plans.sort((a, b) => a.color.localeCompare(b.color));
+        groupByType(plans: Plan[]): PlansGroup[] {
+            plans = plans.sort((a, b) => a.type.name.localeCompare(b.type.name));
             const groups: PlansGroup[] = [];
             for (let i = 0; i < plans.length; i++) {
                 const plan = plans[i];
-                if (i > 0 && plan.color === plans[i - 1].color) {
+                if (i > 0 && plan.type.name === plans[i - 1].type.name) {
                     groups.at(-1)?.plans.push(plan);
                 } else {
-                    groups.push({ title: planTypes[plan.color].title, plans: [plan] });
+                    groups.push({ title: plan.type.title, plans: [plan] });
                 }
             }
             return groups;
         },
     },
-    data() {
-        return {
-            selectedColors: ["green", "yellow", "red", "blue", "orange"] as Colors[],
-            groupBy: "startAt" as "startAt" | "color",
-        };
-    },
-    components: { PlanItem, ColorSelect },
+
+    components: { PlanItem, TypeSelect },
 };
 </script>
 
 <template>
     <div class="plans-list" v-if="$props.plans.length">
         <div class="settings">
-            <ColorSelect v-model="selectedColors" />
+            <TypeSelect v-model="selectedTypes" />
             <select v-model="groupBy">
                 <option value="startAt">По порядку</option>
                 <option value="color">По типу</option>

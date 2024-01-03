@@ -3,7 +3,6 @@ import { Plan } from "./plansModule";
 
 interface ModalData {
     plan: Plan | undefined;
-    isPlanNew: boolean;
 }
 
 export interface dialogState {
@@ -13,7 +12,6 @@ export interface dialogState {
 
 const modalData: ModalData = {
     plan: undefined,
-    isPlanNew: false,
 };
 
 export const dialogModule = {

@@ -53,68 +53,73 @@ export default {
 
 <template>
     <div class="input">
-        <div class="input-wrapper">
-            <label :for="name" :class="{ focused: isFocused || value !== '' }">{{ title }}</label
-            ><input :type="inputType" :id="name" @focus="isFocused = true" @blur="blur" @input="updateValue" :value="value" />
-            <button class="showPassword" @click="showPassword" v-if="$props.type === 'password'" tabindex="-1">
-                <icon :name="isPassVisible ? 'eye-slash' : 'eye'" />
-            </button>
-        </div>
-        <div class="error-message" v-if="showMessage">{{ errorMessage }}</div>
+        <label>
+            <div class="input-wrapper">
+                <span class="title" :class="{ focused: isFocused || value !== '' }">
+                    {{ title }}
+                </span>
+                <input :type="inputType" :id="name" @focus="isFocused = true" @blur="blur" @input="updateValue" :value="value" />
+                <button class="showPassword" @click="showPassword" v-if="$props.type === 'password'" tabindex="-1">
+                    <icon :name="isPassVisible ? 'eye-slash' : 'eye'" />
+                </button>
+            </div>
+        </label>
     </div>
+    <div class="error-message" v-if="showMessage">{{ errorMessage }}</div>
 </template>
 
 <style lang="scss">
 .input {
-    .input-wrapper {
-        position: relative;
-        label {
-            position: absolute;
-            top: 12px;
-            left: 8px;
-            background-color: var(--background-color);
-            color: var(--text-secondary);
-            &.focused {
-                top: -4px;
-                font-size: 14px;
-                color: var(--text-color);
-            }
-            transition: all 0.2s;
-        }
-        input {
-            padding: 8px;
-            font-family: inherit;
-            font-size: 16px;
+    label {
+        cursor: text;
+        .input-wrapper {
             border: 1px solid var(--border-color);
             border-radius: 4px;
-            width: 100%;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            &:focus {
-                outline: none;
-                border: 1px solid var(--text-secondary);
+            padding: 8px;
+            position: relative;
+            .title {
+                position: absolute;
+                top: 12px;
+                left: 8px;
+                background-color: var(--background-color);
+                color: var(--text-secondary);
+                &.focused {
+                    top: -4px;
+                    font-size: 14px;
+                    color: var(--text-color);
+                }
+                transition: all 0.2s;
             }
-        }
-        .showPassword {
-            border: none;
-            background-color: transparent;
-            position: absolute;
-            right: 8px;
-            top: 8px;
-            padding: 0;
-            cursor: pointer;
-            color: var(--text-color);
-            svg {
-                height: 20px;
-                width: 20px;
+            input {
+                font-family: inherit;
+                font-size: 16px;
+                width: calc(100% - 20px);
+                border: none;
+                background-color: var(--background-color);
+                color: var(--text-color);
+                &:focus {
+                    outline: none;
+                }
+            }
+            .showPassword {
+                border: none;
+                background-color: transparent;
+                float: right;
+                padding: 0;
+                cursor: pointer;
+                color: var(--text-color);
+                svg {
+                    height: 20px;
+                    width: 20px;
+                }
             }
         }
     }
+}
 
-    .error-message {
-        margin-top: 4px;
-        font-size: 14px;
-        color: rgba(255, 0, 0, 0.5);
-    }
+.error-message {
+    margin-top: 4px;
+    font-size: 14px;
+    color: rgba(255, 0, 0, 0.5);
 }
 </style>

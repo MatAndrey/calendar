@@ -1,13 +1,12 @@
 <script lang="ts">
-import { Plan, planTypes } from "@/store/plansModule";
+import { Plan } from "@/store/plansModule";
 import { defineComponent } from "vue";
 import Checkbox from "@/components/UI/Checkbox.vue";
 import PrimaryBtn from "@/components/UI/PrimaryBtn.vue";
 import VFocus from "@/directives/VFocus";
 import { formatDate } from "@/helpers/formatDate";
 import { savePlan } from "@/helpers/api/savePlans";
-import { uid } from "uid";
-import ColorSelect from "../UI/ColorSelect.vue";
+import TypeSelect from "../UI/TypeSelect.vue";
 
 export default defineComponent({
     methods: {
@@ -19,19 +18,8 @@ export default defineComponent({
             this.$store.commit("closeModal");
         },
         async saveChanges() {
-            if (this.isRepeat && this.$store.state.dialog.modalData.isPlanNew) {
-                const newPlans: Plan[] = [];
-                for (let i = 0; i < this.repeatSettings.times; i++) {
-                    newPlans.push({
-                        ...this.plan,
-                        id: uid(),
-                        startAt: this.plan.startAt + i * this.repeatSettings.period * 24 * 60 * 60 * 1000,
-                    });
-                }
-                await savePlan(newPlans);
-            } else {
-                await savePlan(this.plan);
-            }
+            await savePlan(this.plan);
+
             this.closeModal();
         },
         changeStart(event: Event) {
@@ -68,14 +56,9 @@ export default defineComponent({
         const plan = JSON.parse(JSON.stringify(this.$store.state.dialog.modalData.plan)) as Plan;
         return {
             plan,
-            isRepeat: false,
-            repeatSettings: {
-                period: 1,
-                times: 2,
-            },
         };
     },
-    components: { Checkbox, PrimaryBtn, ColorSelect },
+    components: { Checkbox, PrimaryBtn, TypeSelect },
     directives: { focus: VFocus },
 });
 </script>
@@ -85,13 +68,6 @@ export default defineComponent({
         <div class="descriprion">
             <textarea v-model="plan.description" placeholder="Описание плана..." v-focus></textarea>
         </div>
-        <label class="is-repeat" v-if="$store.state.dialog.modalData.isPlanNew"
-            >Повторять<Checkbox :active="isRepeat" @pointerup="isRepeat = !isRepeat" size="16px"
-        /></label>
-        <div class="repeat-settings" v-if="isRepeat">
-            <label>Количество повторений <input type="number" min="0" v-model="repeatSettings.times" step="1" /></label>
-            <label>Промежуток повторений (сут) <input type="number" min="0" v-model="repeatSettings.period" step="1" /></label>
-        </div>
         <div class="time-settings">
             <label>Начало <input type="time" @change="changeStart" :value="formatDate(plan.startAt, 'hh:mm')" /></label>
             <label>Длительность <input type="number" min="0" @change="changeDuration" :value="formatDuration(plan.duration)" step="0.5" /></label>
@@ -99,7 +75,7 @@ export default defineComponent({
             <label>Дата <input type="date" :value="formatDate(plan.startAt, 'YYYY-MM-DD')" @focusout="changeDate" /></label>
         </div>
 
-        <ColorSelect v-model="plan.color" />
+        <TypeSelect v-model="plan.type" />
         <PrimaryBtn @click="saveChanges" class="save-btn"><icon name="floppy-disk" />Сохранить</PrimaryBtn>
     </div>
 </template>
@@ -138,22 +114,6 @@ export default defineComponent({
         width: 100%;
         color: var(--text-color);
         background-color: var(--background-color);
-    }
-    .is-repeat {
-        display: flex;
-        align-items: center;
-        button {
-            margin-left: 8px;
-        }
-    }
-    .repeat-settings {
-        label {
-            display: block;
-            margin-top: 4px;
-            input {
-                width: 50px;
-            }
-        }
     }
     .color-select {
         float: left;

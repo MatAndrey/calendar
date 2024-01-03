@@ -1,10 +1,9 @@
 <script lang="ts">
 import { defineComponent } from "vue";
-import { uid } from "uid";
 import Week from "@/components/Week.vue";
 import PrimaryBtn from "@/components/UI/PrimaryBtn.vue";
 import { formatDate } from "@/helpers/formatDate";
-import PlanDialog from "@/components/Modal/PlanDialog.vue";
+import { Plan } from "@/store/plansModule";
 
 const weekStart = new Date();
 weekStart.setDate(weekStart.getDate() - (weekStart.getDay() || 7) + 1);
@@ -33,22 +32,19 @@ export default defineComponent({
             const date = new Date();
             date.setDate(date.getDate() + 1);
             date.setHours(0, 0, 0, 0);
-            const plan = {
-                title: "",
-                description: "",
-                startAt: +date,
-                duration: 0,
-                completed: false,
-                color: "orange",
-                id: uid(),
-            };
-            this.$store.commit("setModalData", { plan, isPlanNew: true });
-            this.$store.commit("openModal", PlanDialog);
+            const lastPlanTomorrow = this.plans.findLast(
+                (p) => (p.startAt >= +date || p.startAt + p.duration >= +date) && p.startAt < 24 * 60 * 60 * 1000 + +date
+            );
+            this.$store.dispatch("createNewPlan", { startAt: lastPlanTomorrow ? lastPlanTomorrow.startAt + lastPlanTomorrow.duration : +date });
         },
     },
     computed: {
         month() {
             return formatDate(this.periodStart, "month YYYY");
+        },
+        plans(): Plan[] {
+            const plans = this.$store.getters.sortedPlans;
+            return plans;
         },
     },
 });

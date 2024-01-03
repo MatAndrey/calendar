@@ -29,9 +29,9 @@ export default {
 </script>
 
 <template>
-    <div :key="plan.id" @click.stop="showModal(plan)" :class="'plan ' + plan.color">
+    <div :key="plan.id" @click.stop="showModal(plan)" :class="'plan ' + plan.type.name">
         <div class="plan_description">
-            <Checkbox size="14px" @click.stop="completePlan(plan)" />
+            <Checkbox size="16px" @click.stop="completePlan(plan)" />
             <p>{{ plan.description }}</p>
         </div>
     </div>
@@ -39,15 +39,18 @@ export default {
 
 <style lang="scss">
 .plan {
-    border-radius: 8px;
-    padding: 3px 8px;
+    border-left: 4px solid var(--plan-primary);
+    background-color: var(--plan-secondary);
+    box-shadow: -1px -1px 4px -2px var(--border-color) inset;
+    padding: 2px;
     cursor: pointer;
     width: 100%;
     .plan_description {
         overflow-wrap: break-word;
-        font-size: 14px;
+        font-size: 16px;
         color: var(--text-secondary);
         height: 100%;
+        min-height: 16px;
         overflow: hidden;
         p {
             white-space: pre-line;

@@ -18,7 +18,7 @@ export default defineComponent({
         plansForDay(dayNumber: number): Plan[] {
             return this.plans.filter(
                 (plan) =>
-                    (plan.startAt > this.$props.weekStart + (dayNumber - 1) * msInDay &&
+                    (plan.startAt >= this.$props.weekStart + (dayNumber - 1) * msInDay &&
                         plan.startAt < this.$props.weekStart + dayNumber * msInDay) ||
                     (plan.startAt + plan.duration > this.$props.weekStart + (dayNumber - 1) * msInDay &&
                         plan.startAt + plan.duration < this.$props.weekStart + dayNumber * msInDay)
@@ -42,13 +42,13 @@ export default defineComponent({
 
 <template>
     <div class="week">
-        <div class="days_container" v-if="!isLoading">
+        <div class="days_container" v-show="!isLoading" ref="daysContainer">
             <div class="time-marks">
                 <div class="time-mark" v-for="hour in 25">{{ hour - 1 >= 10 ? hour - 1 : "0" + (hour - 1) }}:00</div>
             </div>
             <Day v-for="dayNumber in 7" :date="(dayNumber - 1) * (1000 * 60 * 60 * 24) + $props.weekStart" :plans="plansForDay(dayNumber)" />
         </div>
-        <Loader v-else />
+        <Loader v-show="isLoading" />
     </div>
 </template>
 
@@ -64,7 +64,7 @@ export default defineComponent({
             color: #999;
             padding-top: calc(72px - 0.5em);
             padding-left: 4px;
-            z-index: 1;
+            z-index: 2;
             position: sticky;
             left: 0;
             background-color: var(--background-color);

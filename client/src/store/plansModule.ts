@@ -1,29 +1,24 @@
 import { ActionContext } from "vuex";
 import { State } from ".";
 import { fetchPlans } from "@/helpers/api/fetchPlans";
+import { uid } from "uid";
+import PlanDialog from "@/components/Modal/PlanDialog.vue";
 
-export enum Colors {
-    orange = "orange",
-    yellow = "yellow",
-    red = "red",
-    green = "green",
-    blue = "blue",
-}
+export const planTypes = [
+    { title: "Отдых", name: "rest" },
+    { title: "Сервис", name: "service" },
+    { title: "Эффективное время", name: "effective" },
+    { title: "Работа", name: "work" },
+] as const;
 
-export const planTypes = {
-    [Colors.orange]: { title: "Кино" },
-    [Colors.yellow]: { title: "Спорт" },
-    [Colors.red]: { title: "Рутина" },
-    [Colors.green]: { title: "Самообучение" },
-    [Colors.blue]: { title: "Развлечение" },
-} as const;
+export type PlanTypes = (typeof planTypes)[number];
 
 export interface Plan {
     startAt: number;
     duration: number;
     description: string;
     completed: boolean;
-    color: keyof typeof planTypes;
+    type: PlanTypes;
     id: string;
 }
 
@@ -72,6 +67,18 @@ export const plansModule = {
         },
         saveMultiplePlans(context: ActionContext<plansState, State>, plans: Plan[]) {
             plans.forEach((plan) => context.commit("editPlan", plan));
+        },
+        createNewPlan(context: ActionContext<plansState, State>, options?: Partial<Plan>) {
+            const newPlan: Plan = {
+                startAt: options?.startAt || Date.now(),
+                duration: options?.duration || 3_600_000,
+                description: options?.description || "",
+                completed: options?.completed || false,
+                type: options?.type || { name: "work", title: "Работа" },
+                id: options?.id || uid(),
+            };
+            context.commit("setModalData", { plan: newPlan }, { root: true });
+            context.commit("openModal", PlanDialog), { root: true };
         },
     },
     getters: {

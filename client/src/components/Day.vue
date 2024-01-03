@@ -53,7 +53,10 @@ export default defineComponent({
                     completed: false,
                     id: uid(),
                     duration,
-                    color: "red",
+                    type: {
+                        name: "work",
+                        title: "Работа",
+                    },
                 };
                 this.showModal(newPlan, true);
                 this.createStartEvent = null;
@@ -113,7 +116,10 @@ export default defineComponent({
                 completed: false,
                 id: uid(),
                 duration: 1000 * 60 * 60,
-                color: "red",
+                type: {
+                    name: "work",
+                    title: "Работа",
+                },
             };
             this.showModal(newPlan, true);
             this.createStartEvent = null;
@@ -183,7 +189,7 @@ export default defineComponent({
         background-color: var(--background-color);
         position: sticky;
         top: 0;
-        z-index: 2;
+        z-index: 1;
         cursor: pointer;
         .day-number,
         .day-name {

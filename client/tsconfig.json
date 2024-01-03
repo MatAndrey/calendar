@@ -5,7 +5,7 @@
         "paths": {
             "@/*": ["./src/*"]
         },
-        "lib": ["es6", "DOM"],
+        "lib": ["es2023", "DOM"],
         "isolatedModules": true,
         "strict": true
     }

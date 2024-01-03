@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { SECRET_KEY } from "..";
+import { SECRET_KEY, usersCollection } from "..";
 import jwt from "jsonwebtoken";
-import { User } from "../models/User";
 
 interface JWT {
     password: string;
@@ -16,7 +15,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
         const name = decoded.name;
         const password = decoded.password;
         if (name && password) {
-            const user = await User.findOne({ name, password });
+            const user = await usersCollection.findOne({name, password })
             if (user) {
                 req.user = {
                     name,

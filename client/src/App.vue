@@ -146,20 +146,21 @@ table {
     --border-secondary: #bbb;
     --text-color: #000;
     --text-secondary: #555;
-    .orange {
-        background-color: #f1e1d1;
+    .work {
+        --plan-primary: rgb(255, 114, 114);
+        --plan-secondary: rgb(255, 246, 246);
     }
-    .yellow {
-        background-color: #f5f1ad;
+    .rest {
+        --plan-primary: rgb(252, 252, 106);
+        --plan-secondary: rgb(255, 255, 243);
     }
-    .red {
-        background-color: #ffcece;
+    .effective {
+        --plan-primary: rgb(143, 255, 143);
+        --plan-secondary: rgb(239, 255, 239);
     }
-    .green {
-        background-color: #d8ffd7;
-    }
-    .blue {
-        background-color: #d7e4ff;
+    .service {
+        --plan-primary: rgb(133, 133, 255);
+        --plan-secondary: rgb(240, 240, 255);
     }
 }
 
@@ -170,20 +171,21 @@ table {
     --border-secondary: #474747;
     --text-color: #fff;
     --text-secondary: #bbbbbb;
-    .orange {
-        background-color: #614c37;
+    .work {
+        --plan-primary: rgb(170, 47, 47);
+        --plan-secondary: rgb(64 55 55);
     }
-    .yellow {
-        background-color: #837f47;
+    .rest {
+        --plan-primary: rgb(153, 153, 20);
+        --plan-secondary: rgb(64 64 61);
     }
-    .red {
-        background-color: #583a3a;
+    .effective {
+        --plan-primary: rgb(22, 116, 22);
+        --plan-secondary: rgb(60 70 60);
     }
-    .green {
-        background-color: #456c44;
-    }
-    .blue {
-        background-color: #445370;
+    .service {
+        --plan-primary: rgb(18, 18, 148);
+        --plan-secondary: rgb(70 70 76);
     }
 }
 
