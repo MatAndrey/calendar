@@ -10,16 +10,9 @@ const SECRET_KEY = process.env.SECRET_KEY!;
 if (!SECRET_KEY || !MONGO_URI) throw new Error("Environment variables are not found");
 
 export { MONGO_URI, SECRET_KEY };
-export let usersCollection: Collection;
 
-const connectDB = async () => {
-    try {
-        MongoClient.connect(MONGO_URI).then(client => usersCollection = client.db('database').collection('users'))
-    } catch (error) {
-        console.log(error);
-        process.exit(1);
-    }
-};
+const client = new MongoClient(MONGO_URI);
+export let usersCollection: Collection;
 
 const app = express();
 app.use(express.json());
@@ -29,8 +22,11 @@ app.use("/plans", plansRouter);
 
 const PORT = process.env.PORT || 5000;
 
-connectDB().then(() => {
+async function start() {
+    await client.connect();
+    usersCollection = client.db("database").collection("users");
     app.listen(PORT, () => {
         console.log("App listening on port " + PORT);
     });
-});
+}
+start();
