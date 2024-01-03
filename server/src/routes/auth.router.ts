@@ -43,7 +43,7 @@ router.post("/change", authMiddleware, async (req: Request, res: Response) => {
         const user = await usersCollection.findOne({ name: oldName });
         if (user) {
             if (user.password === oldPassword) {
-                usersCollection.updateOne(
+                await usersCollection.updateOne(
                     { name },
                     {
                         $set: {
@@ -57,7 +57,7 @@ router.post("/change", authMiddleware, async (req: Request, res: Response) => {
             }
             return res.status(401).json({ message: "Пароль не совпадает" });
         } else {
-            return res.status(400).json({ message: "Некорректные данные" });
+            return res.status(400).json({ message: "Пользователь не найден" });
         }
     } else {
         return res.status(400).json({ message: "Некорректные данные" });

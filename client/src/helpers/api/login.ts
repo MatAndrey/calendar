@@ -37,19 +37,21 @@ export async function register(name: string, password: string) {
 }
 
 export async function saveAccoutChanges(name: string, oldPassword: string, newPassword: string) {
-    const response = await fetch(baseURL + "/auth/change", {
-        method: "POST",
-        body: JSON.stringify({ name, oldPassword, newPassword }),
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + store.state.user.token,
-        },
-    });
-    const token = (await response.json()).token as string;
-    store.commit("setToken", token);
-    store.commit("setName", name);
-    if (token) {
-        fetchPlans(token);
+    if (store.state.user.token) {
+        const response = await fetch(baseURL + "/auth/change", {
+            method: "POST",
+            body: JSON.stringify({ name, oldPassword, newPassword }),
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + store.state.user.token,
+            },
+        });
+        const token = (await response.json()).token as string;
+        store.commit("setToken", token);
+        store.commit("setName", name);
+        if (token) {
+            fetchPlans(token);
+        }
+        return token;
     }
-    return token;
 }
