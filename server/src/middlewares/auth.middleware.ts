@@ -26,10 +26,10 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
                             name,
                             password,
                         };
-                    }
-                }
-            }
+                        next();
+                    } else next();
+                } else next();
+            } else next();
         });
-    }
-    next();
+    } else next();
 }
